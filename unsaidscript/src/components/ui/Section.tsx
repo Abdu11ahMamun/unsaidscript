@@ -1,10 +1,17 @@
+import { cn } from "../../lib/cn";
 
-import React from "react";
-
-type SectionProps = React.PropsWithChildren<{ className?: string }>;
-
-export function Section({ children, className = "" }: SectionProps) {
-	return <section className={className}>{children}</section>;
+export function Section({
+  id,
+  className,
+  children,
+}: {
+  id?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className={cn("relative", className)}>
+      {children}
+    </section>
+  );
 }
-
-export default Section;
