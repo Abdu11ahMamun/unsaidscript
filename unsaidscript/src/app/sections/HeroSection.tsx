@@ -2,9 +2,7 @@ import { useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Section } from "../components/ui/Section";
 import { Container } from "../components/ui/Container";
-import { HeroBadge } from "../../components/blocks/HeroBadge";
 import { site } from "../../content/site";
-import { HeroActions } from "../../components/blocks/HeroActions";
 
 
 export function HeroSection() {
@@ -18,30 +16,34 @@ export function HeroSection() {
   );
 
   return (
-    <Section className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-[#070a12] to-black text-white">
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/30 via-black/55 to-black" />
-
-      <Container className="relative z-10 flex min-h-screen flex-col items-center justify-center text-center">
-        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: "easeOut" }}>
-          <div className="mb-6">
-            <HeroBadge>✨ Available for Freelance Projects</HeroBadge>
+    <Section id="top" className="pt-24 md:pt-28">
+      <Container>
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-4 py-2 text-xs font-semibold text-cyan-200">
+            <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            {site.brand.tagline}
           </div>
 
-          <h1 className="text-5xl font-black leading-tight md:text-7xl">
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              {site.brand.name}
-            </span>
-            <br />
-            <span className="text-white">Crafting Digital Experiences</span>
+          <h1 className="mt-5 text-4xl font-black tracking-tight md:text-6xl">
+            {site.brand.name}
+            <span className="text-white/50"> — by {site.brand.author}</span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-200/90 md:text-xl">
-            {site.brand.tagline}
+          <p className="mt-4 text-base text-white/70 md:text-lg">
+            {site.brand.description}
           </p>
 
-          <HeroActions onPrimary={() => scrollTo("projects")} onSecondary={() => scrollTo("notes")} />
-        </motion.div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a className="rounded-xl bg-cyan-400 px-5 py-3 text-sm font-bold text-black hover:brightness-110" href="#projects">
+              View Projects
+            </a>
+            <a className="rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white hover:bg-white/10" href="#contact">
+              Contact
+            </a>
+          </div>
+        </div>
       </Container>
     </Section>
+
   );
 }
