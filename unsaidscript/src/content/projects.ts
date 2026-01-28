@@ -2,37 +2,51 @@ export type Project = {
   id: string;
   title: string;
   description: string;
+  emoji?: string;
   tech: string[];
-  href?: string;   // live/demo
-  repo?: string;   // github
-  featured?: boolean;
+  href?: string;   // live demo
+  github?: string; // repo
+  stats?: { label: string; value: string }[];
 };
 
 export const projects: Project[] = [
   {
     id: "ai-chat",
     title: "AI Chat Platform",
-    description: "Real-time chat with AI features, smart replies, and clean UX.",
-    tech: ["React", "TypeScript", "Node.js", "WebSocket"],
+    description: "Real-time chat app with AI-powered features and smart replies.",
+    emoji: "💬",
+    tech: ["React", "Node.js", "OpenAI", "WebSocket"],
     href: "#",
-    repo: "#",
-    featured: true,
+    github: "#",
+    stats: [
+      { label: "Stars", value: "245" },
+      { label: "Users", value: "1.2k" },
+    ],
   },
   {
-    id: "ecom-dashboard",
+    id: "ecommerce-dashboard",
     title: "E-commerce Dashboard",
-    description: "Analytics dashboard for e-commerce businesses with real-time insights.",
+    description: "Analytics dashboard with real-time insights for e-commerce teams.",
+    emoji: "📊",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
     href: "#",
-    repo: "#",
-    featured: true,
+    github: "#",
+    stats: [
+      { label: "Stars", value: "189" },
+      { label: "Users", value: "850" },
+    ],
   },
   {
-    id: "task-app",
+    id: "task-manager",
     title: "Task Management App",
-    description: "Collaborative task management with team features and integrations.",
+    description: "Collaborative task manager with team features and integrations.",
+    emoji: "✅",
     tech: ["React", "Firebase", "Tailwind", "Framer Motion"],
     href: "#",
-    repo: "#",
+    github: "#",
+    stats: [
+      { label: "Stars", value: "312" },
+      { label: "Users", value: "2.1k" },
+    ],
   },
 ];

@@ -11,6 +11,7 @@ import { ServicesSection } from "../app/sections/home/ServicesSection";
 
 
 
+
 function Anchor({ id }: { id: string }) {
   // Optional: helps with sticky header offsets (adjust -top-24 based on your header height)
   return <div id={id} className="relative -top-24" aria-hidden="true" />;
