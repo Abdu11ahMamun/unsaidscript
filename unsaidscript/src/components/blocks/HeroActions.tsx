@@ -1,4 +1,3 @@
-import React from "react";
 import { ArrowRight, Book } from "lucide-react";
 import { cn } from "../../lib/cn";
 

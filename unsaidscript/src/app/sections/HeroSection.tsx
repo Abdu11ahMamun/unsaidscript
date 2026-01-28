@@ -1,10 +1,11 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Section } from "../components/ui/Section";
 import { Container } from "../components/ui/Container";
-import { HeroBadge } from "../components/blocks/HeroBadge";
-import { HeroActions } from "../components/blocks/HeroActions";
-import { site } from "../content/site";
+import { HeroBadge } from "../../components/blocks/HeroBadge";
+import { site } from "../../content/site";
+import { HeroActions } from "../../components/blocks/HeroActions";
+
 
 export function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -28,17 +29,14 @@ export function HeroSection() {
 
           <h1 className="text-5xl font-black leading-tight md:text-7xl">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              {site.name}
+              {site.brand.name}
             </span>
             <br />
             <span className="text-white">Crafting Digital Experiences</span>
           </h1>
 
           <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-200/90 md:text-xl">
-            {site.tagline}
-            <span className="block mt-2 text-gray-400">
-              Inspired by {site.inspirations.join(", ")} — calm UI with a little mystery.
-            </span>
+            {site.brand.tagline}
           </p>
 
           <HeroActions onPrimary={() => scrollTo("projects")} onSecondary={() => scrollTo("notes")} />

@@ -1,4 +1,3 @@
-import React from "react";
 import { Star } from "lucide-react";
 
 function ratingToStars(rating: number) {
