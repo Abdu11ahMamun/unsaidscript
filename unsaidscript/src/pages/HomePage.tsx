@@ -1,5 +1,4 @@
-import { Header } from "../app/components/Header";
-import { Footer } from "../app/components/Footer";
+
 import { BooksSection } from "../app/sections/BooksSection";
 import { BlogSection } from "../app/sections/home/BlogSection";
 import { ContactSection } from "../app/sections/home/ContactSection";
@@ -7,6 +6,8 @@ import { HeroSection } from "../app/sections/home/HeroSection";
 import { NotesSection } from "../app/sections/home/NotesSection";
 import { ProjectsSection } from "../app/sections/home/ProjectsSection";
 import { ServicesSection } from "../app/sections/home/ServicesSection";
+import { Header } from "../components/layouts/Header";
+import { Footer } from "../components/layouts/Footer";
 
 
 

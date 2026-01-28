@@ -1,4 +1,5 @@
-import { AppLayout } from "./app/layouts/AppLayout";
+
+import { AppLayout } from "./components/layouts/AppLayout";
 import { HomePage } from "./pages/HomePage";
 
 export default function App() {
