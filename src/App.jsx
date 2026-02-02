@@ -1791,21 +1791,21 @@ export default function App() {
 
                 <div className="mt-10 flex flex-wrap justify-center gap-4">
                   <a
-                    href="mailto:your.email@example.com"
+                    href="mailto:cs.abdullah@gmail.com"
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-lg font-bold transition hover:brightness-110"
                   >
                     <Mail size={20} />
                     Send Email
                   </a>
                   <a
-                    href="#"
+                    href="https://github.com/Abdu11ahMamun"
                     className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-lg font-bold backdrop-blur-xl transition hover:bg-white/10"
                   >
                     <Github size={20} />
                     GitHub
                   </a>
                   <a
-                    href="#"
+                    href="https://www.linkedin.com/in/abdu11ahmamun/"
                     className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-lg font-bold backdrop-blur-xl transition hover:bg-white/10"
                   >
                     <Linkedin size={20} />
