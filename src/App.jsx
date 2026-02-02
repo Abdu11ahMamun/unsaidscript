@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
@@ -25,6 +25,9 @@ import {
   X,
   Zap,
 } from "lucide-react";
+
+// Lazy loaded components
+const NotesNebulaCanvas = lazy(() => import('./NotesNebulaCanvas'));
 
 // Utility functions
 const cn = (...classes) => classes.filter(Boolean).join(" ");
@@ -189,7 +192,8 @@ const HeroBackground = () => {
       }
     }
 
-    for (let i = 0; i < 100; i++) particles.push(new Particle());
+    const isMobile = window.innerWidth < 768;
+    for (let i = 0; i < (isMobile ? 50 : 100); i++) particles.push(new Particle());
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -530,136 +534,6 @@ const TrainBackgroundCanvas = () => {
   }, [prefersReducedMotion]);
 
   return <canvas ref={canvasRef} className="absolute inset-0 opacity-70" aria-hidden="true" />;
-};
-
-// Notes Nebula Canvas
-const NotesNebulaCanvas = ({ intensity = 1 }) => {
-  const canvasRef = useRef(null);
-  const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let raf = 0;
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const state = { w: 0, h: 0, t: 0, mx: 0.5, my: 0.5 };
-
-    const setSize = () => {
-      const w = canvas.parentElement?.clientWidth ?? window.innerWidth;
-      const h = canvas.parentElement?.clientHeight ?? 600;
-      state.w = w;
-      state.h = h;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    setSize();
-
-    const rand = (a, b) => a + Math.random() * (b - a);
-
-    const particles = Array.from({ length: Math.floor(120 * intensity) }, () => ({
-      x: rand(-1, 1),
-      y: rand(-1, 1),
-      z: rand(0.15, 1.0),
-      r: rand(0.6, 2.4),
-      vx: rand(-0.0012, 0.0012),
-      vy: rand(-0.0012, 0.0012),
-      hue: rand(185, 290),
-      tw: rand(0.4, 1.4),
-    }));
-
-    const onMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      state.mx = (e.clientX - rect.left) / rect.width;
-      state.my = (e.clientY - rect.top) / rect.height;
-    };
-
-    canvas.addEventListener("pointermove", onMove, { passive: true });
-
-    const draw = () => {
-      state.t += 1;
-
-      ctx.clearRect(0, 0, state.w, state.h);
-
-      const g = ctx.createRadialGradient(
-        state.w * (0.25 + 0.5 * state.mx),
-        state.h * (0.25 + 0.5 * state.my),
-        0,
-        state.w * 0.55,
-        state.h * 0.55,
-        Math.max(state.w, state.h)
-      );
-      g.addColorStop(0, "rgba(34,211,238,0.10)");
-      g.addColorStop(0.45, "rgba(168,85,247,0.08)");
-      g.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, state.w, state.h);
-
-      const v = ctx.createLinearGradient(0, 0, 0, state.h);
-      v.addColorStop(0, "rgba(0,0,0,0.65)");
-      v.addColorStop(0.35, "rgba(0,0,0,0.25)");
-      v.addColorStop(1, "rgba(0,0,0,0.70)");
-      ctx.fillStyle = v;
-      ctx.fillRect(0, 0, state.w, state.h);
-
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.tw += 0.015;
-
-        if (p.x < -1.2) p.x = 1.2;
-        if (p.x > 1.2) p.x = -1.2;
-        if (p.y < -1.2) p.y = 1.2;
-        if (p.y > 1.2) p.y = -1.2;
-
-        const parx = (state.mx - 0.5) * 0.18;
-        const pary = (state.my - 0.5) * 0.18;
-
-        const px = (p.x + parx * (1 - p.z)) * (state.w * 0.48) + state.w * 0.5;
-        const py = (p.y + pary * (1 - p.z)) * (state.h * 0.48) + state.h * 0.5;
-        const pr = p.r * (0.6 + (1 - p.z) * 1.2) * (0.75 + 0.25 * Math.sin(p.tw));
-
-        const alpha = 0.18 + (1 - p.z) * 0.25;
-        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, pr, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-      raf = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    let rr = 0;
-    const onResize = () => {
-      cancelAnimationFrame(rr);
-      rr = requestAnimationFrame(() => setSize());
-    };
-
-    window.addEventListener("resize", onResize);
-    return () => {
-      canvas.removeEventListener("pointermove", onMove);
-      window.removeEventListener("resize", onResize);
-      cancelAnimationFrame(rr);
-      cancelAnimationFrame(raf);
-    };
-  }, [prefersReducedMotion, intensity]);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 opacity-75" aria-hidden="true" />;
 };
 
 // Intro Loader
@@ -1198,6 +1072,7 @@ export default function App() {
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const services = [
     {
@@ -1430,20 +1305,36 @@ export default function App() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="hidden items-center gap-8 md:flex"
+                className="flex items-center gap-8"
               >
-                {["Services", "Projects", "Books", "Notes", "Blog", "Contact"].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollTo(item.toLowerCase())}
-                    className="text-sm font-semibold text-gray-300 transition hover:text-white"
-                  >
-                    {item}
-                  </button>
-                ))}
+                {/* Desktop Menu */}
+                <div className="hidden items-center gap-8 md:flex">
+                  {["Services", "Projects", "Books", "Notes", "Blog", "Contact"].map((item) => (
+                    <button
+                      key={item}
+                      onClick={() => scrollTo(item.toLowerCase())}
+                      className="text-sm font-semibold text-gray-300 transition hover:text-white"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button
+                  className="md:hidden text-white"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  aria-label="Menu"
+                >
+                  {mobileMenuOpen ? <X size={24} /> : (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  )}
+                </button>
               </motion.div>
 
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="hidden md:flex items-center gap-3">
                 <a
                   href="#contact"
                   className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2.5 text-sm font-bold transition hover:brightness-110"
@@ -1454,6 +1345,39 @@ export default function App() {
             </nav>
           </Container>
         </header>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl md:hidden"
+            >
+              <div className="flex flex-col items-center justify-center h-full gap-8">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="absolute top-6 right-6"
+                >
+                  <X size={32} className="text-white" />
+                </button>
+                {["Services", "Projects", "Books", "Notes", "Blog", "Contact"].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      scrollTo(item.toLowerCase());
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-2xl font-bold text-white transition hover:text-cyan-400"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       {/* Hero Content */}
         <Container className="relative z-10 flex min-h-[calc(100vh-88px)] flex-col items-center justify-center text-center">
@@ -1660,7 +1584,9 @@ export default function App() {
       {/* Notes Section (with Nebula) */}
       <Section id="notes" className="relative py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <NotesNebulaCanvas intensity={1} />
+          <Suspense fallback={<div className="h-96" />}>
+            <NotesNebulaCanvas intensity={1} />
+          </Suspense>
           <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/35 to-black/80" />
         </div>
 
