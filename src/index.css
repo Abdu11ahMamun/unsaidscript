@@ -6,13 +6,25 @@ html {
   scroll-behavior: smooth;
 }
 
+* {
+  /* Optimize rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Improve scroll performance */
+  overflow-x: hidden;
+}
+
+/* Enable GPU acceleration for canvases */
+canvas {
+  will-change: auto;
+  contain: strict;
 }
 
 /* Custom scrollbar */
@@ -31,4 +43,51 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #22d3ee, #a78bfa);
+}
+
+/* Prose enhancements for markdown */
+.prose-invert h2 {
+  @apply border-b border-white/10 pb-2;
+}
+
+.prose-invert blockquote {
+  @apply not-italic;
+}
+
+.prose-invert pre {
+  @apply overflow-x-auto;
+}
+
+.prose-invert pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose-invert table {
+  @apply w-full;
+}
+
+.prose-invert img {
+  @apply rounded-lg;
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
