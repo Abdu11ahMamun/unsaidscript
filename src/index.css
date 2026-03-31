@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer base, components, utilities;
 
 html {
   scroll-behavior: smooth;
@@ -10,6 +8,7 @@ html {
   /* Optimize rendering */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
 body {
@@ -45,37 +44,13 @@ canvas {
   background: linear-gradient(180deg, #22d3ee, #a78bfa);
 }
 
-/* Prose enhancements for markdown */
-.prose-invert h2 {
-  @apply border-b border-white/10 pb-2;
-}
-
-.prose-invert blockquote {
-  @apply not-italic;
-}
-
-.prose-invert pre {
-  @apply overflow-x-auto;
-}
-
-.prose-invert pre code {
-  @apply bg-transparent p-0;
-}
-
-.prose-invert table {
-  @apply w-full;
-}
-
-.prose-invert img {
-  @apply rounded-lg;
-}
-
 /* Line clamp utility */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 1;
 }
 
 .line-clamp-2 {
@@ -83,6 +58,7 @@ canvas {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 2;
 }
 
 .line-clamp-3 {
@@ -90,4 +66,5 @@ canvas {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 3;
 }
