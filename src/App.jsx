@@ -535,6 +535,13 @@ function Card({ children=null, style={}, accent=C.green }) {
 ══════════════════════════════════════════ */
 function HomePage() {
   const [mx,setMx]=useState(0),[my,setMy]=useState(0);
+  /* the status line reads the visitor's clock */
+  const hour = new Date().getHours();
+  const daypart = hour < 5  ? ["🌙 reading hour","🕯 the city sleeps"]
+               : hour < 11 ? ["☕ tea: brewing","🌅 morning pages"]
+               : hour < 17 ? ["☕ tea: refilled","⚙ deep-work mode"]
+               : hour < 21 ? ["🌆 golden hour","📖 evening chapter"]
+               :             ["🌙 reading hour","🕯 quiet mode"];
   useEffect(()=>{
     const h=(/** @type {any} */ e)=>{setMx((e.clientX/window.innerWidth-.5)*2);setMy((e.clientY/window.innerHeight-.5)*2);};
     window.addEventListener("mousemove",h); return()=>window.removeEventListener("mousemove",h);
@@ -586,20 +593,23 @@ function HomePage() {
           {/* a tiny status line — the day, as a dev sees it */}
           <div style={{ fontFamily:"'Fira Code',monospace", fontSize:11.5, color:C.muted, display:"flex", gap:14, flexWrap:"wrap" }}>
             <span>⎇ dhaka</span>
-            <span>☕ tea: refilled</span>
-            <span>📖 reading: kafka on the shore</span>
+            <span>{daypart[0]}</span>
+            <span>{daypart[1]}</span>
             <span>🎓 next: dr. abdullah</span>
           </div>
         </div>
 
         {/* Right — a life, written as a script */}
-        <div style={{ position:"relative", zIndex:2 }}>
+        <div style={{ position:"relative", zIndex:2, transform:`perspective(1100px) rotateX(${my*-2}deg) rotateY(${mx*2.4}deg)`, transition:"transform .18s ease-out", transformStyle:"preserve-3d" }}>
           <LifeScript/>
           <div style={{ textAlign:"center", marginTop:14, fontSize:12.5, color:C.muted, fontStyle:"italic", fontFamily:"'Fraunces',serif" }}>
             unsaidscript — অব্যক্ত যা ছিল, script হয়ে গেল।
           </div>
         </div>
       </section>
+
+      {/* ═══ the two languages of one person ═══ */}
+      <Marquee/>
 
       {/* ═══ THE STORY — chapters of a reading life ═══ */}
       <section id="story" style={{ background:C.bg, padding:"90px 60px 70px", position:"relative", overflow:"hidden" }}>
@@ -732,7 +742,7 @@ function HomePage() {
       <Hills front={C.bg} back="#EFE8D6" bg="#fff"/>
 
       {/* ═══ PUBLICATIONS ═══ */}
-      <section style={{ background:C.bg, padding:"70px 60px 90px" }}>
+      <section id="research" style={{ background:C.bg, padding:"70px 60px 90px" }}>
         <SectionLabel color={C.gold}>Research</SectionLabel>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start" }}>
           <div>
@@ -844,7 +854,7 @@ function WritingPage() {
   const all=[...BOOK_NOTES,...ARTICLES];
   const shown=filter==="All"?all:filter==="Articles"?ARTICLES:BOOK_NOTES;
   return (
-    <div style={{ padding:"80px 60px", position:"relative", overflow:"hidden" }}>
+    <div className="rvgroup" style={{ padding:"80px 60px", position:"relative", overflow:"hidden" }}>
       <Cloud top="4%" left="-15%" scale={0.8} dur={80} opacity={0.6}/>
       <SootSprite style={{ top:90, right:"6%" }} size={17} dur={4}/>
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:48, alignItems:"center", marginBottom:64 }}>
@@ -908,12 +918,151 @@ function WritingPage() {
 }
 
 /* ══════════════════════════════════════════
+   COMMAND PALETTE — ⌘K, like a real IDE.
+══════════════════════════════════════════ */
+function CommandPalette({ open, onClose, goTo, showToast }) {
+  const [q, setQ] = useState("");
+  const [sel, setSel] = useState(0);
+  const inputRef = useRef(null);
+
+  const jump = (id) => {
+    onClose();
+    goTo("home");
+    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }), 320);
+  };
+
+  const ITEMS = [
+    { icon:"⌨️", label:"Jump to projects — the IDE", hint:"home", run:()=>jump("projects") },
+    { icon:"📖", label:"Read my story", hint:"home", run:()=>jump("story") },
+    { icon:"🎓", label:"See publications & research", hint:"home", run:()=>jump("research") },
+    { icon:"✍️", label:"Open writing & book reviews", hint:"page", run:()=>{ onClose(); goTo("writing"); } },
+    { icon:"🏠", label:"Go home", hint:"page", run:()=>{ onClose(); goTo("home"); } },
+    { icon:"✉️", label:"Copy email — cs.abdullah.mamun@gmail.com", hint:"copy", run:()=>{ navigator.clipboard?.writeText("cs.abdullah.mamun@gmail.com"); showToast("email copied ✓"); onClose(); } },
+    { icon:"🌐", label:"Visit AAIINS Lab", hint:"↗", run:()=>{ window.open("https://aaiins-lab.com/","_blank"); onClose(); } },
+    { icon:"🤖", label:"Visit Codex AI BD", hint:"↗", run:()=>{ window.open("http://codexaitbd.com/","_blank"); onClose(); } },
+  ];
+  const shown = ITEMS.filter(it => it.label.toLowerCase().includes(q.toLowerCase()));
+
+  useEffect(() => { if (open) { setQ(""); setSel(0); setTimeout(()=>inputRef.current?.focus(), 30); } }, [open]);
+  useEffect(() => { setSel(0); }, [q]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowDown") { e.preventDefault(); setSel(i => Math.min(i+1, shown.length-1)); }
+      if (e.key === "ArrowUp")   { e.preventDefault(); setSel(i => Math.max(i-1, 0)); }
+      if (e.key === "Enter" && shown[sel]) shown[sel].run();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, shown, sel, onClose]);
+
+  if (!open) return null;
+  return (
+    <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:3000, background:"rgba(35,32,24,0.45)", backdropFilter:"blur(6px)", display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:"16vh" }}>
+      <div onClick={e=>e.stopPropagation()} style={{ width:"min(580px, 92vw)", background:C.termBg, borderRadius:16, border:"1px solid rgba(255,255,255,0.10)", boxShadow:"0 30px 90px rgba(0,0,0,0.5)", overflow:"hidden", animation:"palettePop .18s ease-out" }}>
+        {/* input */}
+        <div style={{ display:"flex", alignItems:"center", gap:10, padding:"15px 18px", borderBottom:"1px solid rgba(255,255,255,0.07)" }}>
+          <span style={{ color:C.termGreen, fontFamily:"'Fira Code',monospace", fontSize:15 }}>❯</span>
+          <input ref={inputRef} value={q} onChange={e=>setQ(e.target.value)} placeholder="type a command — projects, story, email…"
+            style={{ flex:1, background:"transparent", border:"none", outline:"none", color:"#e5e7eb", fontSize:14.5, fontFamily:"'Fira Code',monospace" }}/>
+          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.3)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:5, padding:"2px 7px", fontFamily:"monospace" }}>esc</span>
+        </div>
+        {/* results */}
+        <div style={{ maxHeight:316, overflowY:"auto", padding:"8px 0" }}>
+          {shown.length===0 && <div style={{ padding:"18px", color:"rgba(255,255,255,0.35)", fontFamily:"'Fira Code',monospace", fontSize:13 }}>{"// nothing found — try \"projects\""}</div>}
+          {shown.map((it,i)=>(
+            <div key={it.label} onClick={it.run} onMouseEnter={()=>setSel(i)}
+              style={{ display:"flex", alignItems:"center", gap:12, padding:"11px 18px", cursor:"pointer", background: sel===i ? "rgba(94,140,97,0.20)" : "transparent", borderLeft: sel===i ? `2px solid ${C.termGreen}` : "2px solid transparent", transition:"background .12s" }}>
+              <span style={{ fontSize:16 }}>{it.icon}</span>
+              <span style={{ flex:1, color: sel===i ? "#fff" : "rgba(255,255,255,0.72)", fontSize:13.5, fontFamily:"'Fira Code',monospace" }}>{it.label}</span>
+              <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.28)", fontFamily:"monospace" }}>{it.hint}</span>
+            </div>
+          ))}
+        </div>
+        {/* footer */}
+        <div style={{ display:"flex", justifyContent:"space-between", padding:"8px 18px", borderTop:"1px solid rgba(255,255,255,0.07)", fontSize:10.5, fontFamily:"'Fira Code',monospace", color:"rgba(255,255,255,0.3)" }}>
+          <span>↑↓ navigate · ↵ run</span>
+          <span style={{ fontStyle:"italic" }}>unsaid.palette</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   IDENTITY MARQUEE — the two languages of one
+   person, drifting past each other.
+══════════════════════════════════════════ */
+function Marquee() {
+  const ITEMS = [
+    ["অব্যক্ত","bn"],["spring boot","tech"],["হিমু","bn"],["murakami","lit"],
+    ["java","tech"],["রবীন্দ্রনাথ","bn"],["react","tech"],["rumi","lit"],
+    ["llm × fintech","tech"],["চা","bn"],["kafka","lit"],["clean code","tech"],
+    ["মিসির আলি","bn"],["microservices","tech"],["dr. abdullah — loading…","lit"],
+  ];
+  const Row = () => (
+    <>
+      {ITEMS.map(([w,k],i)=>(
+        <span key={i} style={{ display:"inline-flex", alignItems:"center", gap:26, paddingRight:26 }}>
+          <span style={
+            k==="tech"
+              ? { fontFamily:"'Fira Code',monospace", fontSize:13, color:C.muted, letterSpacing:0.5 }
+              : { fontFamily:"'Fraunces',serif", fontStyle:"italic", fontSize:16, color: k==="bn" ? C.coral : C.ink, opacity: k==="bn" ? 0.85 : 0.7 }
+          }>{w}</span>
+          <span style={{ color:C.gold, fontSize:10, opacity:0.7 }}>✦</span>
+        </span>
+      ))}
+    </>
+  );
+  return (
+    <div className="marqueeWrap" style={{ borderTop:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}`, background:"rgba(255,255,255,0.5)", padding:"13px 0", overflow:"hidden", position:"relative" }}>
+      <div className="marqueeTrack" style={{ display:"flex", width:"max-content" }}>
+        <Row/><Row/>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
    APP SHELL
 ══════════════════════════════════════════ */
 export default function App() {
   const [page,setPage]=useState("home");
   const [fading,setFading]=useState(false);
+  const [paletteOpen,setPaletteOpen]=useState(false);
+  const [toast,setToast]=useState("");
   useLeafCursor();
+
+  const showToast = (msg) => { setToast(msg); setTimeout(()=>setToast(""), 2200); };
+
+  /* ⌘K / Ctrl+K opens the palette */
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPaletteOpen(o=>!o); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  /* scroll choreography — every section child rises into view */
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const els = document.querySelectorAll("section > *, .rvgroup > *");
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("rvin"); io.unobserve(en.target); } });
+      }, { threshold: 0.07 });
+      els.forEach(el => {
+        el.classList.add("rv");
+        const sibs = Array.from(el.parentElement?.children || []);
+        el.style.transitionDelay = `${Math.min(sibs.indexOf(el), 4) * 70}ms`;
+        io.observe(el);
+      });
+      return () => io.disconnect();
+    }, 80);
+    return () => clearTimeout(t);
+  }, [page]);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -945,7 +1094,11 @@ export default function App() {
             <button key={id} onClick={()=>goTo(id)} style={{ background:"none", border:"none", color:page===id?C.ink:C.muted, padding:"7px 18px", cursor:"pointer", fontSize:14, fontWeight:page===id?700:400, borderRadius:20, transition:"all .2s", borderBottom:page===id?`2px solid ${C.coral}`:"2px solid transparent" }}>{label}</button>
           ))}
         </div>
-        <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+          <button onClick={()=>setPaletteOpen(true)} title="Command palette"
+            style={{ background:"#fff", border:`1.5px solid ${C.border}`, borderRadius:8, padding:"6px 11px", fontFamily:"monospace", fontSize:11.5, color:C.muted, cursor:"pointer", display:"flex", alignItems:"center", gap:6 }}>
+            <span style={{ fontSize:12 }}>⌘</span>K
+          </button>
           <div style={{ background:C.termBg, borderRadius:8, padding:"6px 12px", fontFamily:"monospace", fontSize:11, display:"flex", alignItems:"center", gap:6 }}>
             <span style={{ color:"#22c55e" }}>●</span>
             <span style={{ color:"rgba(255,255,255,0.5)" }}>available</span>
@@ -957,6 +1110,14 @@ export default function App() {
       <div style={{ paddingTop:60, position:"relative", zIndex:1, opacity:fading?0:1, transform:fading?"translateY(8px)":"none", transition:"opacity .22s, transform .22s" }}>
         {PAGES[page]}
       </div>
+
+      {/* ── COMMAND PALETTE + TOAST ── */}
+      <CommandPalette open={paletteOpen} onClose={()=>setPaletteOpen(false)} goTo={goTo} showToast={showToast}/>
+      {toast && (
+        <div style={{ position:"fixed", bottom:30, left:"50%", transform:"translateX(-50%)", zIndex:3500, background:C.termBg, color:C.termGreen, fontFamily:"'Fira Code',monospace", fontSize:13, padding:"10px 22px", borderRadius:30, border:"1px solid rgba(255,255,255,0.1)", boxShadow:"0 10px 30px rgba(0,0,0,0.3)", animation:"palettePop .2s ease-out" }}>
+          {toast}
+        </div>
+      )}
 
       {/* ── FOOTER — forest twilight with fireflies ── */}
       <footer style={{ background:`linear-gradient(180deg, ${C.dark}, #1E2A22)`, padding:"40px 44px 32px", position:"relative", zIndex:1, overflow:"hidden" }}>
@@ -998,6 +1159,15 @@ export default function App() {
           50%{transform:translate(-10px,-22px);opacity:0.5}
           75%{transform:translate(14px,-6px);opacity:0.9}
         }
+        /* scroll choreography */
+        .rv{ opacity:0; transform:translateY(26px); transition:opacity .75s ease, transform .75s ease; }
+        .rv.rvin{ opacity:1; transform:none; }
+        /* identity marquee */
+        @keyframes marquee{ to{ transform:translateX(-50%); } }
+        .marqueeTrack{ animation:marquee 38s linear infinite; }
+        .marqueeWrap:hover .marqueeTrack{ animation-play-state:paused; }
+        /* palette entrance */
+        @keyframes palettePop{ from{ opacity:0; transform:scale(0.97) translateY(-6px);} to{ opacity:1; transform:scale(1) translateY(0);} }
         *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
         html{scroll-behavior:smooth}
         ::-webkit-scrollbar{width:5px;background:${C.bg}}
