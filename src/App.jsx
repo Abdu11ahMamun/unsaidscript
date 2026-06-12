@@ -483,16 +483,23 @@ function TypewriterTerminal({ lines=[], title="bash", style={} }) {
 /* ══════════════════════════════════════════
    LOGO — a sprout lantern
 ══════════════════════════════════════════ */
-function Logo({ size = 28 }) {
+function Logo({ size = 30 }) {
   return (
     <div style={{ display:"flex", alignItems:"center", gap:9, cursor:"pointer" }}>
-      <svg viewBox="0 0 32 32" width={size} height={size} fill="none">
-        <circle cx="16" cy="16" r="15" fill={C.dark}/>
-        <circle cx="16" cy="16" r="15" fill="none" stroke={C.gold} strokeWidth="1" opacity="0.5"/>
-        <path d="M16 24 L16 14" stroke="#EAF3E7" strokeWidth="1.8" strokeLinecap="round"/>
-        <path d="M16 15 C16 10, 11 9, 9 11 C9 15, 13 16.5, 16 15Z" fill="#86B489"/>
-        <path d="M16 13 C16 8, 21 7, 23 9 C23 13, 19 14.5, 16 13Z" fill="#B7D9A8"/>
-        <circle cx="16" cy="25" r="1.6" fill={C.gold}/>
+      <svg viewBox="0 0 64 64" width={size} height={size}>
+        <circle cx="32" cy="32" r="30" fill={C.dark}/>
+        <circle cx="32" cy="32" r="30" fill="none" stroke={C.gold} strokeWidth="1.6" opacity="0.55"/>
+        <line x1="32" y1="24" x2="32" y2="14" stroke="#EAF3E7" strokeWidth="2.4" strokeLinecap="round"/>
+        <path d="M32 16.5 C32 11, 26.5 9.8, 24.4 12 C24.4 16.4, 28.8 18, 32 16.5 Z" fill="#86B489"/>
+        <path d="M32 14 C32 8.5, 37.5 7.3, 39.6 9.5 C39.6 13.9, 35.2 15.5, 32 14 Z" fill="#B7D9A8"/>
+        <path d="M22.5 27.2 Q22.5 23.8 26 23.8 L38 23.8 Q41.5 23.8 41.5 27.2
+                 C41.5 35.6 37.2 42.4 32 49.4
+                 C26.8 42.4 22.5 35.6 22.5 27.2 Z" fill="#F3EEDF"/>
+        <line x1="32" y1="39.2" x2="32" y2="46.6" stroke={C.dark} strokeWidth="1.7" strokeLinecap="round"/>
+        <circle cx="32" cy="35.6" r="2.5" fill={C.gold}/>
+        <path d="M25.6 26.6 C25.8 33.2 28.4 38.6 30.4 42" fill="none" stroke="#D9CFB4" strokeWidth="1.1" strokeLinecap="round" opacity="0.85"/>
+        <path d="M38.4 26.6 C38.2 33.2 35.6 38.6 33.6 42" fill="none" stroke="#D9CFB4" strokeWidth="1.1" strokeLinecap="round" opacity="0.85"/>
+        <path d="M32 51.2 C33.7 53.3 34.5 54.6 34.5 55.8 A2.5 2.5 0 1 1 29.5 55.8 C29.5 54.6 30.3 53.3 32 51.2 Z" fill={C.gold}/>
       </svg>
       <span style={{ fontWeight:700, fontSize:16, letterSpacing:"-0.3px", color:C.ink, fontFamily:"'Fraunces',serif" }}>unsaidscript</span>
     </div>
@@ -1620,12 +1627,17 @@ export default function App() {
         ))}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:16, position:"relative" }}>
           <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
-              <circle cx="16" cy="16" r="15" fill="rgba(255,255,255,0.08)"/>
-              <path d="M16 24 L16 14" stroke="#EAF3E7" strokeWidth="1.8" strokeLinecap="round"/>
-              <path d="M16 15 C16 10, 11 9, 9 11 C9 15, 13 16.5, 16 15Z" fill="#86B489"/>
-              <path d="M16 13 C16 8, 21 7, 23 9 C23 13, 19 14.5, 16 13Z" fill="#B7D9A8"/>
-              <circle cx="16" cy="25" r="1.6" fill={C.gold}/>
+            <svg viewBox="0 0 64 64" width="24" height="24">
+              <circle cx="32" cy="32" r="30" fill="rgba(255,255,255,0.08)"/>
+              <line x1="32" y1="24" x2="32" y2="14" stroke="#EAF3E7" strokeWidth="2.4" strokeLinecap="round"/>
+              <path d="M32 16.5 C32 11, 26.5 9.8, 24.4 12 C24.4 16.4, 28.8 18, 32 16.5 Z" fill="#86B489"/>
+              <path d="M32 14 C32 8.5, 37.5 7.3, 39.6 9.5 C39.6 13.9, 35.2 15.5, 32 14 Z" fill="#B7D9A8"/>
+              <path d="M22.5 27.2 Q22.5 23.8 26 23.8 L38 23.8 Q41.5 23.8 41.5 27.2
+                       C41.5 35.6 37.2 42.4 32 49.4
+                       C26.8 42.4 22.5 35.6 22.5 27.2 Z" fill="#F3EEDF"/>
+              <line x1="32" y1="39.2" x2="32" y2="46.6" stroke="#2C3A30" strokeWidth="1.7" strokeLinecap="round"/>
+              <circle cx="32" cy="35.6" r="2.5" fill={C.gold}/>
+              <path d="M32 51.2 C33.7 53.3 34.5 54.6 34.5 55.8 A2.5 2.5 0 1 1 29.5 55.8 C29.5 54.6 30.3 53.3 32 51.2 Z" fill={C.gold}/>
             </svg>
             <span style={{ fontWeight:700, fontSize:14, color:"rgba(255,255,255,0.9)", fontFamily:"'Fraunces',serif" }}>unsaidscript</span>
           </div>
