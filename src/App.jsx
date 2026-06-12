@@ -155,7 +155,7 @@ const BOOK_NOTES = [
 ══════════════════════════════════════════ */
 function RotatingWord() {
   const WORDS = ["build.", "write.", "dream.", "wonder."];
-  const COLORS = [C.green, C.coral, C.sky, C.gold];
+  const COLORS = [C.coral, "#2E6E8E", "#4A7A4E", "#C07F1F"];
   const [idx, setIdx] = useState(0);
   const [out, setOut] = useState(false);
   useEffect(() => {
@@ -179,143 +179,77 @@ function RotatingWord() {
 }
 
 /* ══════════════════════════════════════════
-   THE READING DESK — animated hero scene.
-   An open book on a desk; the things of a life
-   float up out of its pages: code, Himu's yellow
-   panjabi, Murakami's moon, the doctoral cap,
-   fireflies. A cup of tea steams beside it.
+   LIFE SCRIPT — the hero editor. A file named
+   unsaid.script types itself: a life, written
+   in the only language that holds both halves.
 ══════════════════════════════════════════ */
-function FloatingDream({ delay=0, dur=7, x=0, children }) {
+const LIFE_LINES = [
+  { raw:'// unsaid.script — the story that compiles', jsx:<span style={{color:"rgba(255,255,255,0.30)"}}>{"// unsaid.script — the story that compiles"}</span> },
+  { raw:'', jsx:<span>&nbsp;</span> },
+  { raw:'import { books } from "./childhood";', jsx:<><span style={{color:"#a78bfa"}}>import</span> <span style={{color:"#e5e7eb"}}>{"{ books }"}</span> <span style={{color:"#a78bfa"}}>from</span> <span style={{color:"#a5d6ff"}}>"./childhood"</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'import { dhaka } from "./home";', jsx:<><span style={{color:"#a78bfa"}}>import</span> <span style={{color:"#e5e7eb"}}>{"{ dhaka }"}</span> <span style={{color:"#a78bfa"}}>from</span> <span style={{color:"#a5d6ff"}}>"./home"</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'', jsx:<span>&nbsp;</span> },
+  { raw:'class Abdullah extends Reader {', jsx:<><span style={{color:"#a78bfa"}}>class</span> <span style={{color:"#79c0ff"}}>Abdullah</span> <span style={{color:"#a78bfa"}}>extends</span> <span style={{color:"#79c0ff"}}>Reader</span> <span style={{color:"#e5e7eb"}}>{"{"}</span></> },
+  { raw:'  builds   = "banking systems @ Koalafi";', jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>builds</span>&nbsp;&nbsp; <span style={{color:"#e5e7eb"}}>=</span> <span style={{color:"#a5d6ff"}}>"banking systems @ Koalafi"</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'  research = { papers: 5, goal: "Dr. Abdullah" };', jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>research</span> <span style={{color:"#e5e7eb"}}>= {"{"}</span> <span style={{color:"#f97316"}}>papers</span><span style={{color:"#e5e7eb"}}>:</span> <span style={{color:"#fbbf24"}}>5</span><span style={{color:"#666"}}>,</span> <span style={{color:"#f97316"}}>goal</span><span style={{color:"#e5e7eb"}}>:</span> <span style={{color:"#a5d6ff"}}>"Dr. Abdullah"</span> <span style={{color:"#e5e7eb"}}>{"}"}</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'  fuel     = ["tea", "murakami", "quiet"];', jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>fuel</span>&nbsp;&nbsp;&nbsp;&nbsp; <span style={{color:"#e5e7eb"}}>= [</span><span style={{color:"#a5d6ff"}}>"tea"</span><span style={{color:"#666"}}>,</span> <span style={{color:"#a5d6ff"}}>"murakami"</span><span style={{color:"#666"}}>,</span> <span style={{color:"#a5d6ff"}}>"quiet"</span><span style={{color:"#e5e7eb"}}>]</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'  faith    = constant;', jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>faith</span>&nbsp;&nbsp;&nbsp; <span style={{color:"#e5e7eb"}}>=</span> <span style={{color:"#a78bfa"}}>constant</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'}', jsx:<span style={{color:"#e5e7eb"}}>{"}"}</span> },
+  { raw:'', jsx:<span>&nbsp;</span> },
+  { raw:'export default Abdullah;  // still compiling…', jsx:<><span style={{color:"#a78bfa"}}>export default</span> <span style={{color:"#79c0ff"}}>Abdullah</span><span style={{color:"#666"}}>;</span>&nbsp;&nbsp;<span style={{color:"#4ade80"}}>{"// still compiling…"}</span></> },
+];
+
+function LifeScript() {
+  const [li, setLi] = useState(0);      // current line
+  const [ci, setCi] = useState(0);      // chars revealed in current line
+  const [blinkOn, setBlinkOn] = useState(true);
+  const done = li >= LIFE_LINES.length;
+
+  useEffect(() => {
+    if (done) return;
+    const line = LIFE_LINES[li].raw;
+    if (ci < line.length) {
+      const t = setTimeout(() => setCi(c => c + 1), 16);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => { setLi(l => l + 1); setCi(0); }, line === '' ? 60 : 150);
+    return () => clearTimeout(t);
+  }, [li, ci, done]);
+
+  useEffect(() => {
+    const iv = setInterval(() => setBlinkOn(b => !b), 530);
+    return () => clearInterval(iv);
+  }, []);
+
   return (
-    <div style={{
-      position:"absolute", left:`calc(50% + ${x}px)`, bottom:"34%",
-      animation:`dreamRise ${dur}s ease-in ${delay}s infinite`,
-      opacity:0, pointerEvents:"none",
-    }}>
-      {children}
-    </div>
-  );
-}
-
-function ReadingDesk({ mx=0, my=0 }) {
-  return (
-    <div style={{ position:"relative", width:"100%", maxWidth:440, height:392, margin:"0 auto" }}>
-
-      {/* ── the dreams rising from the book ── */}
-      <FloatingDream delay={0}   dur={7}   x={-46}>
-        <span style={{ fontFamily:"'Fira Code',monospace", fontSize:24, fontWeight:700, color:C.green }}>{"{ }"}</span>
-      </FloatingDream>
-      <FloatingDream delay={1.8} dur={8}   x={26}>
-        {/* Himu's yellow panjabi */}
-        <svg width="34" height="40" viewBox="0 0 34 40">
-          <path d="M10 6 L14 2 L20 2 L24 6 L31 12 L27 17 L24 14 L24 38 L10 38 L10 14 L7 17 L3 12 Z" fill="#F2C24B" stroke="#D9A441" strokeWidth="1"/>
-          <line x1="17" y1="8" x2="17" y2="20" stroke="#D9A441" strokeWidth="1.2"/>
-        </svg>
-      </FloatingDream>
-      <FloatingDream delay={3.4} dur={7.5} x={-18}>
-        {/* Murakami's crescent moon */}
-        <svg width="26" height="26" viewBox="0 0 26 26">
-          <path d="M19 3 A11 11 0 1 0 19 23 A8.5 8.5 0 0 1 19 3 Z" fill={C.sky} opacity="0.9"/>
-        </svg>
-      </FloatingDream>
-      <FloatingDream delay={5}   dur={8.5} x={52}>
-        {/* the doctoral cap — Dr. Abdullah */}
-        <svg width="34" height="26" viewBox="0 0 34 26">
-          <path d="M17 2 L33 9 L17 16 L1 9 Z" fill={C.ink}/>
-          <path d="M9 12 L9 19 C9 21 25 21 25 19 L25 12" fill="none" stroke={C.ink} strokeWidth="2.4"/>
-          <line x1="30" y1="10" x2="30" y2="19" stroke={C.gold} strokeWidth="1.6"/>
-          <circle cx="30" cy="20.5" r="2" fill={C.gold}/>
-        </svg>
-      </FloatingDream>
-      <FloatingDream delay={2.6} dur={6.5} x={62}>
-        <div style={{ width:6, height:6, borderRadius:"50%", background:C.gold, boxShadow:`0 0 10px ${C.gold}` }}/>
-      </FloatingDream>
-      <FloatingDream delay={6.2} dur={7} x={-64}>
-        <div style={{ width:5, height:5, borderRadius:"50%", background:C.coral, boxShadow:`0 0 8px ${C.coral}` }}/>
-      </FloatingDream>
-      <FloatingDream delay={4.2} dur={9} x={-4}>
-        <span style={{ fontFamily:"'Fraunces',serif", fontStyle:"italic", fontSize:17, color:C.coral }}>অব্যক্ত</span>
-      </FloatingDream>
-
-      {/* ── the desk scene (parallax with cursor) ── */}
-      <div style={{ position:"absolute", inset:0, transform:`translate(${mx*7}px, ${my*4}px)`, transition:"transform .15s ease-out" }}>
-        <svg viewBox="0 0 460 392" style={{ width:"100%", height:"100%", display:"block" }}>
-          {/* soft halo behind the book */}
-          <ellipse cx="230" cy="220" rx="170" ry="120" fill="url(#halo)"/>
-          <defs>
-            <radialGradient id="halo">
-              <stop offset="0%" stopColor="#FFF3D6" stopOpacity="0.9"/>
-              <stop offset="100%" stopColor="#FFF3D6" stopOpacity="0"/>
-            </radialGradient>
-            <linearGradient id="deskwood" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#C9A06B"/>
-              <stop offset="100%" stopColor="#A87E4D"/>
-            </linearGradient>
-          </defs>
-
-          {/* desk — standing on the meadow, like furniture in a field */}
-          <rect x="20" y="300" width="420" height="16" rx="8" fill="url(#deskwood)"/>
-          <rect x="20" y="314" width="420" height="6" rx="3" fill="#8F6A3E" opacity="0.6"/>
-          <rect x="54" y="320" width="11" height="52" rx="4" fill="#8F6A3E"/>
-          <rect x="395" y="320" width="11" height="52" rx="4" fill="#8F6A3E"/>
-          <ellipse cx="230" cy="374" rx="190" ry="8" fill="#3B3A2F" opacity="0.10"/>
-
-          {/* ── the open book ── */}
-          <g className="bookGroup">
-            {/* shadow */}
-            <ellipse cx="230" cy="302" rx="120" ry="10" fill="#3B3A2F" opacity="0.12"/>
-            {/* back cover */}
-            <path d="M110 290 Q230 270 350 290 L350 296 Q230 278 110 296 Z" fill="#8F4A38"/>
-            {/* left page block */}
-            <path d="M112 288 Q170 262 230 274 L230 292 Q170 280 112 294 Z" fill="#F7EFD9"/>
-            {/* right page block */}
-            <path d="M348 288 Q290 262 230 274 L230 292 Q290 280 348 294 Z" fill="#FBF4E2"/>
-            {/* left open page */}
-            <path d="M114 286 Q170 256 228 270 L228 288 Q170 276 114 292 Z" fill="#FFFDF5"/>
-            {/* right open page */}
-            <path d="M346 286 Q290 256 232 270 L232 288 Q290 276 346 292 Z" fill="#FFFEF8"/>
-            {/* spine line */}
-            <line x1="230" y1="270" x2="230" y2="292" stroke="#E0D5B8" strokeWidth="1.5"/>
-            {/* text lines — left page */}
-            <g stroke="#C9BD9C" strokeWidth="1.6" strokeLinecap="round" opacity="0.85">
-              <line x1="130" y1="272" x2="210" y2="266"/>
-              <line x1="132" y1="277" x2="206" y2="271"/>
-              <line x1="134" y1="282" x2="200" y2="277"/>
-            </g>
-            {/* text lines — right page (some "code") */}
-            <g strokeLinecap="round" opacity="0.9">
-              <line x1="250" y1="266" x2="300" y2="270" stroke={C.green} strokeWidth="1.8"/>
-              <line x1="252" y1="271" x2="330" y2="276" stroke="#C9BD9C" strokeWidth="1.6"/>
-              <line x1="254" y1="276" x2="316" y2="281" stroke={C.coral} strokeWidth="1.8"/>
-            </g>
-            {/* the turning page */}
-            <path className="flipPage" d="M230 270 Q260 250 300 258 Q272 264 232 288 Z" fill="#FFFEF8" stroke="#EFE5C8" strokeWidth="1"/>
-          </g>
-
-          {/* ── tea cup with steam ── */}
-          <g>
-            <ellipse cx="392" cy="300" rx="26" ry="5" fill="#3B3A2F" opacity="0.1"/>
-            <path d="M372 274 L376 298 Q392 304 408 298 L412 274 Z" fill="#FFFFFF" stroke="#E0D5B8" strokeWidth="1.5"/>
-            <path d="M412 278 Q424 280 420 290 Q416 296 410 293" fill="none" stroke="#E0D5B8" strokeWidth="2.4"/>
-            <ellipse cx="392" cy="274" rx="20" ry="4.5" fill="#C58A52"/>
-            {/* steam */}
-            <path className="steam s1" d="M384 264 Q380 254 386 246 Q392 238 388 228" fill="none" stroke="#B9C5C2" strokeWidth="2" strokeLinecap="round"/>
-            <path className="steam s2" d="M396 262 Q400 252 394 244 Q388 236 394 226" fill="none" stroke="#B9C5C2" strokeWidth="2" strokeLinecap="round"/>
-          </g>
-
-          {/* ── small stack of read books, left ── */}
-          <g>
-            <rect x="48" y="282" width="74" height="11" rx="2.5" fill={C.coral} transform="rotate(-1 85 287)"/>
-            <rect x="54" y="271" width="64" height="11" rx="2.5" fill={C.sky} transform="rotate(1.5 86 276)"/>
-            <rect x="50" y="260" width="70" height="11" rx="2.5" fill={C.green} transform="rotate(-0.8 85 265)"/>
-            <text x="60" y="269" fontSize="7.5" fill="#fff" fontFamily="'Fraunces',serif" fontStyle="italic" transform="rotate(-0.8 85 265)">rumi · himu · robi</text>
-          </g>
-        </svg>
+    <div style={{ background:C.termBg, borderRadius:16, overflow:"hidden", border:"1px solid rgba(255,255,255,0.07)", boxShadow:"0 24px 70px rgba(13,17,23,0.30)" }}>
+      {/* chrome */}
+      <div style={{ background:"#161b22", padding:"10px 16px", display:"flex", alignItems:"center", gap:7, borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+        {["#ff5f57","#febc2e","#28c840"].map(c=><div key={c} style={{width:10,height:10,borderRadius:"50%",background:c}}/>)}
+        <span style={{ color:"rgba(255,255,255,0.30)", fontSize:11, marginLeft:8, fontFamily:"monospace", letterSpacing:0.5 }}>unsaid.script — ~/abdullah</span>
       </div>
-
-      {/* caption */}
-      <div style={{ position:"absolute", bottom:-26, left:0, right:0, textAlign:"center", fontSize:12.5, color:C.muted, fontStyle:"italic", fontFamily:"'Fraunces',serif" }}>
-        everything I am came out of a book — even the code.
+      {/* code */}
+      <div style={{ padding:"18px 0 14px" }}>
+        {LIFE_LINES.map((ln, i) => {
+          if (i > li) return null;
+          const typingThis = i === li && !done;
+          return (
+            <div key={i} style={{ display:"flex", fontFamily:"'Fira Code','SF Mono',monospace", fontSize:13, lineHeight:1.95 }}>
+              <span style={{ width:44, textAlign:"right", paddingRight:16, color:"rgba(255,255,255,0.18)", userSelect:"none", flexShrink:0 }}>{i+1}</span>
+              <span style={{ color:"#e5e7eb", paddingRight:18, whiteSpace:"pre-wrap" }}>
+                {typingThis
+                  ? <>{ln.raw.slice(0, ci)}<span style={{ color:C.termGreen, opacity:blinkOn?1:0 }}>▌</span></>
+                  : ln.jsx}
+                {i === LIFE_LINES.length-1 && done && <span style={{ color:C.termGreen, opacity:blinkOn?1:0 }}> ▌</span>}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      {/* status bar */}
+      <div style={{ display:"flex", justifyContent:"space-between", padding:"6px 16px", background:"#161b22", borderTop:"1px solid rgba(255,255,255,0.06)", fontSize:11, fontFamily:"'Fira Code',monospace", color:"rgba(255,255,255,0.38)" }}>
+        <span>⎇ life &nbsp;·&nbsp; bn + en &nbsp;·&nbsp; UTF-8</span>
+        <span style={{ color:C.termGreen }}>⬤ compiling</span>
       </div>
     </div>
   );
@@ -597,100 +531,6 @@ function Card({ children=null, style={}, accent=C.green }) {
 }
 
 /* ══════════════════════════════════════════
-   HERO MORNING — one scene, one story:
-   a reading desk standing in a meadow.
-   Left half stays clean for the words.
-══════════════════════════════════════════ */
-function SoftCloud({ top, right, scale=1, opacity=0.8, sway=26, dur=14, delay=0 }) {
-  return (
-    <div style={{ position:"absolute", top, right, transform:`scale(${scale})`, opacity, pointerEvents:"none" }}>
-      <div style={{ animation:`cloudSway ${dur}s ease-in-out ${delay}s infinite alternate` }}>
-      <svg width="200" height="64" viewBox="0 0 200 64">
-        <defs>
-          <linearGradient id="scl" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF"/>
-            <stop offset="100%" stopColor="#EDF2EA"/>
-          </linearGradient>
-        </defs>
-        <g fill="url(#scl)">
-          <ellipse cx="55" cy="44" rx="48" ry="17"/>
-          <ellipse cx="102" cy="33" rx="44" ry="22"/>
-          <ellipse cx="150" cy="43" rx="42" ry="16"/>
-        </g>
-        <ellipse cx="100" cy="54" rx="82" ry="6" fill="#CBDCD4" opacity="0.3"/>
-      </svg>
-      </div>
-    </div>
-  );
-}
-
-function HeroMorning() {
-  return (
-    <div style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none" }} aria-hidden="true">
-      {/* calm sky — barely-there gradient */}
-      <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg,#F6EDD6 0%, #EEF1DE 45%, #E3EDDC 75%, #D9E8CF 100%)" }}/>
-
-      {/* small sun, tucked in the corner — a glow, not a planet */}
-      <div style={{ position:"absolute", top:-70, right:-50, width:300, height:300 }}>
-        <div style={{ position:"absolute", inset:0, borderRadius:"50%", background:"radial-gradient(circle,#FFF4CE 18%, rgba(250,226,160,0.55) 45%, rgba(250,226,160,0) 72%)" }}/>
-        <svg viewBox="0 0 300 300" width="100%" height="100%" style={{ animation:"sunSpin 120s linear infinite", transformOrigin:"center", opacity:0.4 }}>
-          <g stroke="#EFCB7F" strokeWidth="2.5" strokeLinecap="round">
-            {Array.from({length:8}).map((_,i)=>{
-              const a=(i/8)*Math.PI*2;
-              return <line key={i}
-                x1={150+Math.cos(a)*92} y1={150+Math.sin(a)*92}
-                x2={150+Math.cos(a)*116} y2={150+Math.sin(a)*116}/>;
-            })}
-          </g>
-        </svg>
-      </div>
-
-      {/* two quiet clouds — upper right only, far from the words */}
-      <SoftCloud top="9%"  right="26%" scale={1}    opacity={0.85} dur={16}/>
-      <SoftCloud top="22%" right="6%"  scale={0.65} opacity={0.55} dur={20} delay={2}/>
-
-      {/* one flock of birds, high and small */}
-      <div style={{ position:"absolute", top:"12%", left:0, animation:"birdFly 52s linear infinite" }}>
-        <svg width="34" height="12" viewBox="0 0 34 12">
-          <path d="M2 8 Q6 2 10 8 M10 8 Q14 2 18 8" stroke="#7C8A77" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.55"/>
-          <path d="M24 9 Q27 5 30 9" stroke="#7C8A77" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.4"/>
-        </svg>
-      </div>
-
-      {/* one soft distant hill line, low — depth without drama */}
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ position:"absolute", bottom:96, left:0, width:"100%", height:90 }}>
-        <path d="M0,70 C260,30 540,78 820,48 C1080,22 1300,66 1440,42 L1440,90 L0,90 Z" fill="#BBD3B4" opacity="0.55"/>
-      </svg>
-
-      {/* the meadow — a gentle strip with flowers, nothing more */}
-      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ position:"absolute", bottom:0, left:0, width:"100%", height:112 }}>
-        <path d="M0,42 C300,14 640,58 960,32 C1180,15 1340,46 1440,30 L1440,120 L0,120 Z" fill="#9FBE8F"/>
-        <path d="M0,76 C360,52 760,90 1100,68 C1280,58 1390,76 1440,68 L1440,120 L0,120 Z" fill="#7BA26C"/>
-        {[[110,68,"#D96C4F"],[330,84,"#F2C24B"],[560,72,"#FFFFFF"],[800,88,"#D96C4F"],[1040,74,"#F2C24B"],[1270,84,"#FFFFFF"]].map(([x,y,c],i)=>(
-          <g key={i}>
-            <line x1={x} y1={y} x2={x} y2={Number(y)+11} stroke="#4E7845" strokeWidth="1.5"/>
-            <circle cx={x} cy={y} r="3" fill={String(c)}/>
-            <circle cx={x} cy={y} r="1.1" fill="#4E7845" opacity="0.5"/>
-          </g>
-        ))}
-        {[210,460,700,940,1180,1380].map((x,i)=>(
-          <g key={i} stroke="#4E7845" strokeWidth="1.3" strokeLinecap="round" opacity="0.6">
-            <path d={`M${x} 108 q-3 -9 -5 -12`} fill="none"/>
-            <path d={`M${x} 108 q1 -11 2 -13`} fill="none"/>
-            <path d={`M${x} 108 q4 -8 6 -10`} fill="none"/>
-          </g>
-        ))}
-      </svg>
-
-      {/* four pollen sparks, right half only */}
-      {[["58%","34%",0],["70%","52%",2],["82%","28%",4],["64%","64%",1.5]].map(([l,t,d],i)=>(
-        <div key={i} style={{ position:"absolute", left:l, top:t, width:4, height:4, borderRadius:"50%", background:"#F2CE82", boxShadow:"0 0 7px rgba(242,206,130,0.85)", opacity:0.6, animation:`pollen ${8+i}s ease-in-out ${d}s infinite` }}/>
-      ))}
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════════
    HOME PAGE
 ══════════════════════════════════════════ */
 function HomePage() {
@@ -702,17 +542,19 @@ function HomePage() {
 
   return (
     <div>
-      {/* ═══ HERO — the reading desk in a painted morning ═══ */}
-      <section style={{ minHeight:"100vh", display:"grid", gridTemplateColumns:"1.05fr 1fr", alignItems:"center", padding:"90px 60px 0", gap:50, position:"relative", overflow:"hidden" }}>
-        {/* the painted morning — calm, composed */}
-        <HeroMorning/>
-        {/* soot sprites peeking */}
-        <SootSprite style={{ bottom:110, left:"6%", transform:`translate(${mx*8}px,${my*5}px)` }} dur={3.5}/>
-        <SootSprite style={{ bottom:140, left:"10%", transform:`translate(${mx*14}px,${my*8}px)` }} size={15} dur={4.4} delay={0.6}/>
-        <SootSprite style={{ bottom:95,  right:"14%", transform:`translate(${mx*-10}px,${my*6}px)` }} size={18} dur={3.9} delay={1.1}/>
+      {/* ═══ HERO — the unsaid script, typing itself ═══ */}
+      <section style={{ minHeight:"94vh", display:"grid", gridTemplateColumns:"1.05fr 1fr", alignItems:"center", padding:"100px 60px 70px", gap:56, position:"relative", overflow:"hidden" }}>
 
-        {/* Left — the sentence of the whole site */}
-        <div style={{ position:"relative", zIndex:3 }}>
+        {/* অব্যক্ত — the word the whole site is named after */}
+        <div style={{ position:"absolute", top:24, right:-20, fontFamily:"'Fraunces',serif", fontStyle:"italic", fontWeight:600, fontSize:"clamp(120px,15vw,220px)", color:C.ink, opacity:0.05, transform:`rotate(-5deg) translate(${mx*-6}px,${my*-4}px)`, pointerEvents:"none", lineHeight:1, userSelect:"none", whiteSpace:"nowrap" }}>অব্যক্ত</div>
+
+        {/* a warm lamp glow behind the editor */}
+        <div style={{ position:"absolute", top:"20%", right:"2%", width:560, height:560, borderRadius:"50%", background:"radial-gradient(circle, rgba(217,164,65,0.10), rgba(217,164,65,0) 65%)", pointerEvents:"none" }}/>
+        {/* faint oversized quote mark behind the headline */}
+        <div style={{ position:"absolute", top:"14%", left:30, fontFamily:"'Fraunces',serif", fontSize:240, color:C.coral, opacity:0.06, lineHeight:1, pointerEvents:"none", userSelect:"none" }}>"</div>
+
+        {/* Left — the thesis */}
+        <div style={{ position:"relative", zIndex:2 }}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:30}}>
             <span style={{fontSize:12,color:C.muted,letterSpacing:1.5,textTransform:"uppercase",fontWeight:500}}>Dhaka, Bangladesh</span>
             <span style={{width:3,height:3,borderRadius:"50%",background:C.border,display:"inline-block"}}/>
@@ -722,29 +564,41 @@ function HomePage() {
             </span>
           </div>
 
-          <h1 style={{ fontSize:"clamp(42px,5.6vw,76px)", fontWeight:600, lineHeight:1.08, letterSpacing:"-0.03em", margin:"0 0 26px", color:C.ink, fontFamily:"'Fraunces',serif" }}>
+          <h1 style={{ fontSize:"clamp(44px,5.8vw,80px)", fontWeight:600, lineHeight:1.06, letterSpacing:"-0.03em", margin:"0 0 26px", color:C.ink, fontFamily:"'Fraunces',serif" }}>
             I read,<br/>therefore I <RotatingWord/>
           </h1>
 
           <p style={{ fontSize:"clamp(16px,1.8vw,19px)", color:C.ink, letterSpacing:"-0.01em", margin:"0 0 14px", lineHeight:1.5, fontWeight:600, fontFamily:"'Fraunces',serif" }}>
             Abdullah Al Mamun <span style={{ color:C.muted, fontWeight:400, fontStyle:"italic" }}>— software engineer @ Koalafi · researcher · reader</span>
           </p>
-          <p style={{ color:C.muted, fontSize:15.5, lineHeight:1.85, maxWidth:480, margin:"0 0 32px" }}>
-            Enterprise banking systems and AI tools by profession — built with the calm of a
-            person raised by books. From Himu's Dhaka to Murakami's wells, every page taught
-            me something I now write in <strong style={{ color:C.ink }}>Java · Spring Boot · React</strong>.
+          <p style={{ color:C.muted, fontSize:15.5, lineHeight:1.85, maxWidth:480, margin:"0 0 34px" }}>
+            A fintech engineer who grew up inside books. By day I build banking systems
+            and AI tools in <strong style={{ color:C.ink }}>Java · Spring Boot · React</strong>;
+            by night I chase pages — Himu's Dhaka, Murakami's wells, Rumi's fire.
+            Some of it becomes code. The rest becomes this site.
           </p>
-          <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-            <a href="#projects" style={{ background:C.green, color:"#fff", padding:"13px 26px", borderRadius:30, textDecoration:"none", fontSize:13.5, fontWeight:700, boxShadow:`0 8px 24px ${C.green}44` }}>Open my projects ⌨️</a>
-            <a href="#story" style={{ background:"#fff", color:C.ink, padding:"13px 26px", borderRadius:30, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>Read my story</a>
+
+          <div style={{ display:"flex", gap:12, flexWrap:"wrap", marginBottom:26 }}>
+            <a href="#projects" style={{ display:"inline-flex", alignItems:"center", gap:8, background:C.termBg, color:C.termGreen, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:700, fontFamily:"'Fira Code',monospace", border:"1px solid rgba(255,255,255,0.08)", boxShadow:"0 10px 30px rgba(13,17,23,0.25)" }}>❯ open the projects</a>
+            <a href="#story" style={{ display:"inline-flex", alignItems:"center", background:"#fff", color:C.ink, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>read my story →</a>
+          </div>
+
+          {/* a tiny status line — the day, as a dev sees it */}
+          <div style={{ fontFamily:"'Fira Code',monospace", fontSize:11.5, color:C.muted, display:"flex", gap:14, flexWrap:"wrap" }}>
+            <span>⎇ dhaka</span>
+            <span>☕ tea: refilled</span>
+            <span>📖 reading: kafka on the shore</span>
+            <span>🎓 next: dr. abdullah</span>
           </div>
         </div>
 
-        {/* Right — the reading desk, standing in the meadow */}
-        <div style={{ position:"relative", zIndex:3, alignSelf:"end", paddingBottom:64 }}>
-          <ReadingDesk mx={mx} my={my}/>
+        {/* Right — a life, written as a script */}
+        <div style={{ position:"relative", zIndex:2 }}>
+          <LifeScript/>
+          <div style={{ textAlign:"center", marginTop:14, fontSize:12.5, color:C.muted, fontStyle:"italic", fontFamily:"'Fraunces',serif" }}>
+            unsaidscript — অব্যক্ত যা ছিল, script হয়ে গেল।
+          </div>
         </div>
-
       </section>
 
       {/* ═══ THE STORY — chapters of a reading life ═══ */}
@@ -1143,45 +997,6 @@ export default function App() {
           25%{transform:translate(18px,-12px);opacity:1}
           50%{transform:translate(-10px,-22px);opacity:0.5}
           75%{transform:translate(14px,-6px);opacity:0.9}
-        }
-        /* ── the dreams that rise out of the open book ── */
-        @keyframes dreamRise{
-          0%   { transform:translateY(0) translateX(0) rotate(0deg) scale(0.55); opacity:0; }
-          14%  { opacity:0.9; }
-          55%  { transform:translateY(-78px) translateX(10px) rotate(7deg) scale(0.95); opacity:0.75; }
-          88%  { opacity:0.15; }
-          100% { transform:translateY(-132px) translateX(-8px) rotate(-5deg) scale(1); opacity:0; }
-        }
-        /* the page that keeps turning */
-        @keyframes pageTurn{
-          0%, 55%  { transform:scaleX(1) skewY(0deg); opacity:1; }
-          70%      { transform:scaleX(0.15) skewY(-8deg); opacity:0.7; }
-          85%      { transform:scaleX(-0.7) skewY(4deg); opacity:0.85; }
-          100%     { transform:scaleX(-1) skewY(0deg); opacity:0; }
-        }
-        .flipPage{ transform-origin:230px 280px; animation:pageTurn 6s ease-in-out infinite; }
-        /* tea steam */
-        @keyframes steamRise{
-          0%   { opacity:0; transform:translateY(4px); }
-          30%  { opacity:0.7; }
-          100% { opacity:0; transform:translateY(-14px); }
-        }
-        .steam{ animation:steamRise 3.4s ease-out infinite; }
-        .steam.s2{ animation-delay:1.6s; }
-        @keyframes sunSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-        @keyframes cloudSway{from{transform:translateX(0)}to{transform:translateX(30px)}}
-        @keyframes birdFly{
-          0%  { transform:translateX(-8vw) translateY(0); }
-          25% { transform:translateX(28vw) translateY(-14px); }
-          50% { transform:translateX(58vw) translateY(6px); }
-          75% { transform:translateX(85vw) translateY(-10px); }
-          100%{ transform:translateX(112vw) translateY(0); }
-        }
-        @keyframes pollen{
-          0%,100%{ transform:translate(0,0); opacity:0.25; }
-          30%    { opacity:0.85; }
-          50%    { transform:translate(14px,-22px); opacity:0.6; }
-          80%    { opacity:0.8; }
         }
         *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
         html{scroll-behavior:smooth}
