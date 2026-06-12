@@ -67,12 +67,38 @@ const EXPERIENCE = [
   },
 ];
 
+/* ── Projects — opened in the IDE ── */
 const PROJECTS = [
-  { emoji:"🌐", label:"LIVE", title:"AAIINS Lab", sub:"Research & Innovation Lab", desc:"Full website for AAIINS Lab — a cutting-edge research and AI innovation hub.", tags:["React","Tailwind","Web"], accent:C.green, link:"https://aaiins-lab.com/" },
-  { emoji:"🤖", label:"LIVE", title:"Codex AI BD", sub:"AI Solutions Platform", desc:"Platform for Codex AI BD — bringing enterprise AI solutions to Bangladesh.", tags:["React","Node.js","AI"], accent:C.sky, link:"http://codexaitbd.com/" },
-  { emoji:"⚡", label:"PROJECT", title:"SPARK", sub:"Agile Management Tool", desc:"Spring Boot microservices + React. Full agile project management with sprints, boards, and team collaboration.", tags:["Spring Boot","Microservices","React"], accent:C.coral, link:null },
-  { emoji:"🧠", label:"AI", title:"Shariah Auditor", sub:"LLM Compliance Tool", desc:"LLM-powered automated Shariah compliance auditing system for Islamic finance.", tags:["Python","LLMs","NLP"], accent:C.gold, link:null },
-  { emoji:"🍜", label:"MOBILE", title:"Khabo", sub:"Food Ordering App", desc:"Android food-ordering app with secure login, real-time DB, and push notifications.", tags:["Android","Java","Firebase"], accent:C.coral, link:null },
+  {
+    emoji:"🌐", label:"LIVE", title:"AAIINS Lab", sub:"Research & Innovation Lab",
+    desc:"Full website for AAIINS Lab — a cutting-edge research and AI innovation hub.",
+    tags:["React","Tailwind","Web"], accent:C.green, link:"https://aaiins-lab.com/",
+    file:"aaiins-lab.tsx", lang:"TypeScript React", icon:"⚛️",
+  },
+  {
+    emoji:"🤖", label:"LIVE", title:"Codex AI BD", sub:"AI Solutions Platform",
+    desc:"Platform for Codex AI BD — bringing enterprise AI solutions to Bangladesh.",
+    tags:["React","Node.js","AI"], accent:C.sky, link:"http://codexaitbd.com/",
+    file:"codex-ai-bd.jsx", lang:"JavaScript", icon:"⚛️",
+  },
+  {
+    emoji:"⚡", label:"PROJECT", title:"SPARK", sub:"Agile Management Tool",
+    desc:"Spring Boot microservices + React. Full agile project management with sprints, boards, and team collaboration.",
+    tags:["Spring Boot","Microservices","React"], accent:C.coral, link:null,
+    file:"spark.java", lang:"Java", icon:"☕",
+  },
+  {
+    emoji:"🧠", label:"AI", title:"Shariah Auditor", sub:"LLM Compliance Tool",
+    desc:"LLM-powered automated Shariah compliance auditing system for Islamic finance.",
+    tags:["Python","LLMs","NLP"], accent:C.gold, link:null,
+    file:"shariah-auditor.py", lang:"Python", icon:"🐍",
+  },
+  {
+    emoji:"🍜", label:"MOBILE", title:"Khabo", sub:"Food Ordering App",
+    desc:"Android food-ordering app with secure login, real-time DB, and push notifications.",
+    tags:["Android","Java","Firebase"], accent:"#A8674C", link:null,
+    file:"khabo.java", lang:"Android", icon:"🤖",
+  },
 ];
 
 const PUBLICATIONS = [
@@ -125,122 +151,283 @@ const BOOK_NOTES = [
 ];
 
 /* ══════════════════════════════════════════
-   GHIBLI CRYSTAL (Three.js) — a floating
-   Laputa-like stone, fireflies & leaves
+   ROTATING WORD — "I read, therefore I ___"
 ══════════════════════════════════════════ */
-function GhibliCrystal({ size = 320 }) {
-  const ref = useRef(null);
-  const st = useRef(/** @type {any} */ ({}));
+function RotatingWord() {
+  const WORDS = ["build.", "write.", "dream.", "wonder."];
+  const COLORS = [C.green, C.coral, C.sky, C.gold];
+  const [idx, setIdx] = useState(0);
+  const [out, setOut] = useState(false);
   useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const run = () => {
-      const T3 = window.THREE, W = el.clientWidth, H = el.clientHeight;
-      const renderer = new T3.WebGLRenderer({ antialias:true, alpha:true });
-      renderer.setSize(W,H); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-      el.appendChild(renderer.domElement);
-      const scene = new T3.Scene();
-      const camera = new T3.PerspectiveCamera(45,W/H,0.1,100);
-      camera.position.set(0,0,5.4);
-
-      scene.add(new T3.AmbientLight(0xfff6e0, 0.55));
-      const sun = new T3.PointLight(0xffd9a0, 9, 18); sun.position.set(-3,3,3); scene.add(sun);
-      const teal = new T3.PointLight(0x6fc7b2, 6, 14); teal.position.set(3,-1,3); scene.add(teal);
-
-      // floating crystal — Laputa stone
-      const crystal = new T3.Mesh(
-        new T3.OctahedronGeometry(0.85, 0),
-        new T3.MeshStandardMaterial({ color:0x9fe3cf, metalness:0.25, roughness:0.12, emissive:0x3fae8e, emissiveIntensity:0.55, transparent:true, opacity:0.96 })
-      );
-      scene.add(crystal);
-      const crystalWire = new T3.Mesh(
-        new T3.OctahedronGeometry(0.88, 0),
-        new T3.MeshBasicMaterial({ color:0xbff2e2, wireframe:true, transparent:true, opacity:0.35 })
-      );
-      scene.add(crystalWire);
-      // inner glow heart
-      const heart = new T3.Mesh(
-        new T3.SphereGeometry(0.34, 24, 24),
-        new T3.MeshBasicMaterial({ color:0xfff3c4, transparent:true, opacity:0.85 })
-      );
-      scene.add(heart);
-
-      // gold lantern rings
-      const ring1 = new T3.Mesh(new T3.TorusGeometry(1.55, 0.016, 16, 120), new T3.MeshBasicMaterial({ color:0xd9a441, transparent:true, opacity:0.55 }));
-      ring1.rotation.x = 1.15; scene.add(ring1);
-      const ring2 = new T3.Mesh(new T3.TorusGeometry(2.0, 0.01, 16, 120), new T3.MeshBasicMaterial({ color:0x6fa8bc, transparent:true, opacity:0.35 }));
-      ring2.rotation.x = 0.7; ring2.rotation.z = 0.6; scene.add(ring2);
-
-      // drifting leaves orbiting the stone
-      const leaves = [];
-      for (let i=0;i<10;i++){
-        const sh = new T3.Shape();
-        sh.moveTo(0,-0.09); sh.quadraticCurveTo(0.07,0,0,0.09); sh.quadraticCurveTo(-0.07,0,0,-0.09);
-        const leaf = new T3.Mesh(
-          new T3.ShapeGeometry(sh),
-          new T3.MeshBasicMaterial({ color: i%2?0x5e8c61:0x86b489, transparent:true, opacity:0.9, side:T3.DoubleSide })
-        );
-        leaf.userData = { r: 1.35+Math.random()*1.1, sp: 0.25+Math.random()*0.35, ph: Math.random()*Math.PI*2, y: (Math.random()-.5)*1.4 };
-        leaves.push(leaf); scene.add(leaf);
-      }
-
-      // fireflies / dust of the forest
-      const pN = 160, pP = new Float32Array(pN*3), pC = new Float32Array(pN*3);
-      for (let i=0;i<pN;i++){
-        pP[i*3]=(Math.random()-.5)*11; pP[i*3+1]=(Math.random()-.5)*9; pP[i*3+2]=(Math.random()-.5)*7-2;
-        const gold = Math.random() > 0.45;
-        pC[i*3]   = gold ? 0.95 : 0.45;
-        pC[i*3+1] = gold ? 0.78 : 0.75;
-        pC[i*3+2] = gold ? 0.30 : 0.60;
-      }
-      const pg = new T3.BufferGeometry();
-      pg.setAttribute("position", new T3.BufferAttribute(pP,3));
-      pg.setAttribute("color", new T3.BufferAttribute(pC,3));
-      const dust = new T3.Points(pg, new T3.PointsMaterial({ size:0.03, vertexColors:true, transparent:true, opacity:0.75 }));
-      scene.add(dust);
-
-      st.current = { renderer, scene, camera, mouse:{x:0,y:0} };
-      let t = 0;
-      const tick = () => {
-        st.current._raf = requestAnimationFrame(tick); t += 0.008;
-        const { mouse } = st.current;
-        // the stone breathes & floats
-        const bob = Math.sin(t*1.4)*0.12;
-        crystal.position.y = bob; crystalWire.position.y = bob; heart.position.y = bob;
-        crystal.rotation.y = t*0.35 + mouse.x*0.4; crystal.rotation.x = Math.sin(t*0.6)*0.12 + mouse.y*0.2;
-        crystalWire.rotation.copy(crystal.rotation);
-        heart.material.opacity = 0.6 + Math.sin(t*2.2)*0.25;
-        heart.scale.setScalar(1 + Math.sin(t*2.2)*0.08);
-        ring1.rotation.z = t*0.18; ring2.rotation.z = -t*0.13;
-        leaves.forEach(l => {
-          const a = t*l.userData.sp + l.userData.ph;
-          l.position.set(Math.cos(a)*l.userData.r, l.userData.y + Math.sin(a*1.7)*0.25 + bob*0.5, Math.sin(a)*l.userData.r*0.6);
-          l.rotation.z = a*2; l.rotation.y = a;
-        });
-        dust.rotation.y = t*0.03;
-        camera.position.x += (mouse.x*0.45 - camera.position.x)*0.04;
-        camera.position.y += (-mouse.y*0.35 - camera.position.y)*0.04;
-        camera.lookAt(0,0,0);
-        renderer.render(scene, camera);
-      };
-      tick();
-      const onR = () => { const W2=el.clientWidth,H2=el.clientHeight; renderer.setSize(W2,H2); camera.aspect=W2/H2; camera.updateProjectionMatrix(); };
-      window.addEventListener("resize", onR);
-      st.current._clean = () => { cancelAnimationFrame(st.current._raf); window.removeEventListener("resize", onR); renderer.dispose(); if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement); };
-    };
-    if (window.THREE) { run(); return; }
-    const s = document.createElement("script");
-    s.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-    s.onload = run; document.head.appendChild(s);
-    return () => st.current._clean?.();
+    const iv = setInterval(() => {
+      setOut(true);
+      setTimeout(() => { setIdx(i => (i + 1) % WORDS.length); setOut(false); }, 320);
+    }, 2600);
+    return () => clearInterval(iv);
   }, []);
-  const onMove = (/** @type {any} */ e) => {
-    const r = ref.current?.getBoundingClientRect();
-    if (r && st.current.mouse) {
-      st.current.mouse.x = ((e.clientX-r.left)/r.width-.5)*2;
-      st.current.mouse.y = ((e.clientY-r.top)/r.height-.5)*2;
-    }
-  };
-  return <div ref={ref} onMouseMove={onMove} style={{ width:size, height:size }}/>;
+  return (
+    <span style={{
+      display:"inline-block",
+      color: COLORS[idx],
+      fontStyle:"italic",
+      transform: out ? "translateY(-14px) rotate(-2deg)" : "translateY(0) rotate(0)",
+      opacity: out ? 0 : 1,
+      transition:"all .32s cubic-bezier(.5,0,.3,1)",
+      minWidth:"3.2ch",
+    }}>{WORDS[idx]}</span>
+  );
+}
+
+/* ══════════════════════════════════════════
+   THE READING DESK — animated hero scene.
+   An open book on a desk; the things of a life
+   float up out of its pages: code, Himu's yellow
+   panjabi, Murakami's moon, the doctoral cap,
+   fireflies. A cup of tea steams beside it.
+══════════════════════════════════════════ */
+function FloatingDream({ delay=0, dur=7, x=0, children }) {
+  return (
+    <div style={{
+      position:"absolute", left:`calc(50% + ${x}px)`, bottom:"34%",
+      animation:`dreamRise ${dur}s ease-in ${delay}s infinite`,
+      opacity:0, pointerEvents:"none",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function ReadingDesk({ mx=0, my=0 }) {
+  return (
+    <div style={{ position:"relative", width:"100%", maxWidth:440, height:392, margin:"0 auto" }}>
+
+      {/* ── the dreams rising from the book ── */}
+      <FloatingDream delay={0}   dur={7}   x={-46}>
+        <span style={{ fontFamily:"'Fira Code',monospace", fontSize:24, fontWeight:700, color:C.green }}>{"{ }"}</span>
+      </FloatingDream>
+      <FloatingDream delay={1.8} dur={8}   x={26}>
+        {/* Himu's yellow panjabi */}
+        <svg width="34" height="40" viewBox="0 0 34 40">
+          <path d="M10 6 L14 2 L20 2 L24 6 L31 12 L27 17 L24 14 L24 38 L10 38 L10 14 L7 17 L3 12 Z" fill="#F2C24B" stroke="#D9A441" strokeWidth="1"/>
+          <line x1="17" y1="8" x2="17" y2="20" stroke="#D9A441" strokeWidth="1.2"/>
+        </svg>
+      </FloatingDream>
+      <FloatingDream delay={3.4} dur={7.5} x={-18}>
+        {/* Murakami's crescent moon */}
+        <svg width="26" height="26" viewBox="0 0 26 26">
+          <path d="M19 3 A11 11 0 1 0 19 23 A8.5 8.5 0 0 1 19 3 Z" fill={C.sky} opacity="0.9"/>
+        </svg>
+      </FloatingDream>
+      <FloatingDream delay={5}   dur={8.5} x={52}>
+        {/* the doctoral cap — Dr. Abdullah */}
+        <svg width="34" height="26" viewBox="0 0 34 26">
+          <path d="M17 2 L33 9 L17 16 L1 9 Z" fill={C.ink}/>
+          <path d="M9 12 L9 19 C9 21 25 21 25 19 L25 12" fill="none" stroke={C.ink} strokeWidth="2.4"/>
+          <line x1="30" y1="10" x2="30" y2="19" stroke={C.gold} strokeWidth="1.6"/>
+          <circle cx="30" cy="20.5" r="2" fill={C.gold}/>
+        </svg>
+      </FloatingDream>
+      <FloatingDream delay={2.6} dur={6.5} x={62}>
+        <div style={{ width:6, height:6, borderRadius:"50%", background:C.gold, boxShadow:`0 0 10px ${C.gold}` }}/>
+      </FloatingDream>
+      <FloatingDream delay={6.2} dur={7} x={-64}>
+        <div style={{ width:5, height:5, borderRadius:"50%", background:C.coral, boxShadow:`0 0 8px ${C.coral}` }}/>
+      </FloatingDream>
+      <FloatingDream delay={4.2} dur={9} x={-4}>
+        <span style={{ fontFamily:"'Fraunces',serif", fontStyle:"italic", fontSize:17, color:C.coral }}>অব্যক্ত</span>
+      </FloatingDream>
+
+      {/* ── the desk scene (parallax with cursor) ── */}
+      <div style={{ position:"absolute", inset:0, transform:`translate(${mx*7}px, ${my*4}px)`, transition:"transform .15s ease-out" }}>
+        <svg viewBox="0 0 460 392" style={{ width:"100%", height:"100%", display:"block" }}>
+          {/* soft halo behind the book */}
+          <ellipse cx="230" cy="220" rx="170" ry="120" fill="url(#halo)"/>
+          <defs>
+            <radialGradient id="halo">
+              <stop offset="0%" stopColor="#FFF3D6" stopOpacity="0.9"/>
+              <stop offset="100%" stopColor="#FFF3D6" stopOpacity="0"/>
+            </radialGradient>
+            <linearGradient id="deskwood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#C9A06B"/>
+              <stop offset="100%" stopColor="#A87E4D"/>
+            </linearGradient>
+          </defs>
+
+          {/* desk — standing on the meadow, like furniture in a field */}
+          <rect x="20" y="300" width="420" height="16" rx="8" fill="url(#deskwood)"/>
+          <rect x="20" y="314" width="420" height="6" rx="3" fill="#8F6A3E" opacity="0.6"/>
+          <rect x="54" y="320" width="11" height="52" rx="4" fill="#8F6A3E"/>
+          <rect x="395" y="320" width="11" height="52" rx="4" fill="#8F6A3E"/>
+          <ellipse cx="230" cy="374" rx="190" ry="8" fill="#3B3A2F" opacity="0.10"/>
+
+          {/* ── the open book ── */}
+          <g className="bookGroup">
+            {/* shadow */}
+            <ellipse cx="230" cy="302" rx="120" ry="10" fill="#3B3A2F" opacity="0.12"/>
+            {/* back cover */}
+            <path d="M110 290 Q230 270 350 290 L350 296 Q230 278 110 296 Z" fill="#8F4A38"/>
+            {/* left page block */}
+            <path d="M112 288 Q170 262 230 274 L230 292 Q170 280 112 294 Z" fill="#F7EFD9"/>
+            {/* right page block */}
+            <path d="M348 288 Q290 262 230 274 L230 292 Q290 280 348 294 Z" fill="#FBF4E2"/>
+            {/* left open page */}
+            <path d="M114 286 Q170 256 228 270 L228 288 Q170 276 114 292 Z" fill="#FFFDF5"/>
+            {/* right open page */}
+            <path d="M346 286 Q290 256 232 270 L232 288 Q290 276 346 292 Z" fill="#FFFEF8"/>
+            {/* spine line */}
+            <line x1="230" y1="270" x2="230" y2="292" stroke="#E0D5B8" strokeWidth="1.5"/>
+            {/* text lines — left page */}
+            <g stroke="#C9BD9C" strokeWidth="1.6" strokeLinecap="round" opacity="0.85">
+              <line x1="130" y1="272" x2="210" y2="266"/>
+              <line x1="132" y1="277" x2="206" y2="271"/>
+              <line x1="134" y1="282" x2="200" y2="277"/>
+            </g>
+            {/* text lines — right page (some "code") */}
+            <g strokeLinecap="round" opacity="0.9">
+              <line x1="250" y1="266" x2="300" y2="270" stroke={C.green} strokeWidth="1.8"/>
+              <line x1="252" y1="271" x2="330" y2="276" stroke="#C9BD9C" strokeWidth="1.6"/>
+              <line x1="254" y1="276" x2="316" y2="281" stroke={C.coral} strokeWidth="1.8"/>
+            </g>
+            {/* the turning page */}
+            <path className="flipPage" d="M230 270 Q260 250 300 258 Q272 264 232 288 Z" fill="#FFFEF8" stroke="#EFE5C8" strokeWidth="1"/>
+          </g>
+
+          {/* ── tea cup with steam ── */}
+          <g>
+            <ellipse cx="392" cy="300" rx="26" ry="5" fill="#3B3A2F" opacity="0.1"/>
+            <path d="M372 274 L376 298 Q392 304 408 298 L412 274 Z" fill="#FFFFFF" stroke="#E0D5B8" strokeWidth="1.5"/>
+            <path d="M412 278 Q424 280 420 290 Q416 296 410 293" fill="none" stroke="#E0D5B8" strokeWidth="2.4"/>
+            <ellipse cx="392" cy="274" rx="20" ry="4.5" fill="#C58A52"/>
+            {/* steam */}
+            <path className="steam s1" d="M384 264 Q380 254 386 246 Q392 238 388 228" fill="none" stroke="#B9C5C2" strokeWidth="2" strokeLinecap="round"/>
+            <path className="steam s2" d="M396 262 Q400 252 394 244 Q388 236 394 226" fill="none" stroke="#B9C5C2" strokeWidth="2" strokeLinecap="round"/>
+          </g>
+
+          {/* ── small stack of read books, left ── */}
+          <g>
+            <rect x="48" y="282" width="74" height="11" rx="2.5" fill={C.coral} transform="rotate(-1 85 287)"/>
+            <rect x="54" y="271" width="64" height="11" rx="2.5" fill={C.sky} transform="rotate(1.5 86 276)"/>
+            <rect x="50" y="260" width="70" height="11" rx="2.5" fill={C.green} transform="rotate(-0.8 85 265)"/>
+            <text x="60" y="269" fontSize="7.5" fill="#fff" fontFamily="'Fraunces',serif" fontStyle="italic" transform="rotate(-0.8 85 265)">rumi · himu · robi</text>
+          </g>
+        </svg>
+      </div>
+
+      {/* caption */}
+      <div style={{ position:"absolute", bottom:-26, left:0, right:0, textAlign:"center", fontSize:12.5, color:C.muted, fontStyle:"italic", fontFamily:"'Fraunces',serif" }}>
+        everything I am came out of a book — even the code.
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   PROJECT IDE — projects, opened the way an
+   engineer actually opens things.
+══════════════════════════════════════════ */
+function ProjectIDE() {
+  const [active, setActive] = useState(0);
+  const [typed, setTyped] = useState(false);
+  const p = PROJECTS[active];
+
+  useEffect(() => {
+    setTyped(false);
+    const t = setTimeout(() => setTyped(true), 60);
+    return () => clearTimeout(t);
+  }, [active]);
+
+  const statusColor = { LIVE:C.termGreen, PROJECT:C.termYellow, AI:C.termPurple, MOBILE:C.termOrange }[p.label] || C.termGreen;
+
+  const K = ({children}) => <span style={{color:"#a78bfa"}}>{children}</span>;     // keyword
+  const S = ({children}) => <span style={{color:"#a5d6ff"}}>{children}</span>;     // string
+  const F = ({children}) => <span style={{color:"#f97316"}}>{children}</span>;     // field
+  const Cm = ({children}) => <span style={{color:"rgba(255,255,255,0.28)"}}>{children}</span>;
+
+  const lines = [
+    <><K>const</K> <span style={{color:"#79c0ff"}}>project</span> = {"{"}</>,
+    <>&nbsp;&nbsp;<F>name</F>: <S>"{p.title}"</S>,</>,
+    <>&nbsp;&nbsp;<F>type</F>: <S>"{p.sub}"</S>,</>,
+    <>&nbsp;&nbsp;<F>stack</F>: [{p.tags.map((t,i)=><span key={t}><S>"{t}"</S>{i<p.tags.length-1?", ":""}</span>)}],</>,
+    <>&nbsp;&nbsp;<F>status</F>: <span style={{color:statusColor,fontWeight:700}}>"{p.label}"</span>,</>,
+    <>{"}"};</>,
+    <>&nbsp;</>,
+    <><Cm>{"// "+p.desc}</Cm></>,
+    <><span style={{color:"#79c0ff"}}>deploy</span>.<span style={{color:"#d2a8ff"}}>run</span>(project); <Cm>{p.link ? "// → "+p.link.replace("https://","").replace("http://","").replace(/\/$/,"") : "// internal build"}</Cm></>,
+  ];
+
+  return (
+    <div style={{ background:C.termBg, borderRadius:16, overflow:"hidden", border:"1px solid rgba(255,255,255,0.07)", boxShadow:"0 18px 60px rgba(13,17,23,0.35)" }}>
+      {/* window chrome */}
+      <div style={{ background:"#161b22", padding:"10px 16px", display:"flex", alignItems:"center", gap:7, borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+        {["#ff5f57","#febc2e","#28c840"].map(c=><div key={c} style={{width:10,height:10,borderRadius:"50%",background:c}}/>)}
+        <span style={{ color:"rgba(255,255,255,0.3)", fontSize:11, marginLeft:8, fontFamily:"monospace", letterSpacing:0.5 }}>projects — unsaidscript IDE</span>
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"210px 1fr", minHeight:380 }}>
+        {/* ── EXPLORER sidebar ── */}
+        <div style={{ borderRight:"1px solid rgba(255,255,255,0.06)", padding:"14px 0", background:"#10151c" }}>
+          <div style={{ fontSize:10, letterSpacing:1.6, color:"rgba(255,255,255,0.35)", fontFamily:"monospace", padding:"0 16px 10px", textTransform:"uppercase" }}>Explorer</div>
+          <div style={{ fontSize:12.5, color:"rgba(255,255,255,0.55)", fontFamily:"'Fira Code',monospace", padding:"3px 16px" }}>▾ 📁 projects</div>
+          {PROJECTS.map((pr,i)=>(
+            <div key={i} onClick={()=>setActive(i)}
+              style={{
+                padding:"7px 16px 7px 32px", cursor:"pointer", fontSize:12.5,
+                fontFamily:"'Fira Code',monospace",
+                color: active===i ? "#fff" : "rgba(255,255,255,0.5)",
+                background: active===i ? "rgba(94,140,97,0.18)" : "transparent",
+                borderLeft: active===i ? `2px solid ${C.termGreen}` : "2px solid transparent",
+                transition:"all .18s", display:"flex", alignItems:"center", gap:8,
+                whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis",
+              }}
+              onMouseEnter={e=>{ if(active!==i) e.currentTarget.style.background="rgba(255,255,255,0.04)"; }}
+              onMouseLeave={e=>{ if(active!==i) e.currentTarget.style.background="transparent"; }}
+            >
+              <span style={{ fontSize:13 }}>{pr.icon}</span>{pr.file}
+              {pr.label==="LIVE" && <span style={{ width:6, height:6, borderRadius:"50%", background:C.termGreen, boxShadow:`0 0 6px ${C.termGreen}`, marginLeft:"auto", flexShrink:0 }}/>}
+            </div>
+          ))}
+        </div>
+
+        {/* ── EDITOR pane ── */}
+        <div style={{ display:"flex", flexDirection:"column" }}>
+          {/* tab bar */}
+          <div style={{ display:"flex", borderBottom:"1px solid rgba(255,255,255,0.06)", background:"#0d1117" }}>
+            <div style={{ padding:"9px 18px", fontSize:12, fontFamily:"'Fira Code',monospace", color:"#fff", background:"#161b22", borderRight:"1px solid rgba(255,255,255,0.06)", borderTop:`2px solid ${p.accent}`, display:"flex", alignItems:"center", gap:8 }}>
+              <span>{p.icon}</span>{p.file}<span style={{ color:"rgba(255,255,255,0.3)", marginLeft:4 }}>×</span>
+            </div>
+          </div>
+
+          {/* code area */}
+          <div style={{ flex:1, padding:"18px 0", opacity: typed?1:0, transform: typed?"translateY(0)":"translateY(6px)", transition:"all .35s ease" }}>
+            {lines.map((ln,i)=>(
+              <div key={active+"-"+i} style={{ display:"flex", fontFamily:"'Fira Code','SF Mono',monospace", fontSize:13, lineHeight:1.9 }}>
+                <span style={{ width:44, textAlign:"right", paddingRight:16, color:"rgba(255,255,255,0.2)", userSelect:"none", flexShrink:0 }}>{i+1}</span>
+                <span style={{ color:"#e5e7eb", paddingRight:20 }}>{ln}</span>
+              </div>
+            ))}
+            {/* run button */}
+            <div style={{ padding:"18px 0 0 44px", display:"flex", gap:10, alignItems:"center" }}>
+              {p.link ? (
+                <a href={p.link} target="_blank" rel="noreferrer"
+                  style={{ display:"inline-flex", alignItems:"center", gap:8, background:"rgba(74,222,128,0.14)", border:`1px solid ${C.termGreen}55`, color:C.termGreen, padding:"8px 18px", borderRadius:8, fontSize:12.5, fontWeight:700, fontFamily:"'Fira Code',monospace", textDecoration:"none", transition:"all .2s" }}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(74,222,128,0.24)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="rgba(74,222,128,0.14)"}
+                >▶ Run — visit live site</a>
+              ) : (
+                <span style={{ display:"inline-flex", alignItems:"center", gap:8, color:"rgba(255,255,255,0.35)", fontSize:12.5, fontFamily:"'Fira Code',monospace" }}>▶ Run <span style={{ fontSize:11 }}>— internal build, ask me for a demo</span></span>
+              )}
+            </div>
+          </div>
+
+          {/* status bar */}
+          <div style={{ display:"flex", justifyContent:"space-between", padding:"6px 16px", background:"#161b22", borderTop:"1px solid rgba(255,255,255,0.06)", fontSize:11, fontFamily:"'Fira Code',monospace", color:"rgba(255,255,255,0.4)" }}>
+            <span>⎇ main &nbsp;·&nbsp; {p.lang}</span>
+            <span style={{ color:statusColor }}>⬤ {p.label}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ══════════════════════════════════════════
@@ -258,7 +445,7 @@ function Cloud({ top, left, scale=1, dur=60, delay=0, opacity=0.9 }) {
   );
 }
 
-function Hills({ flip=false, front=C.greenS, back="#DCE9DA", bg="transparent" }) {
+function Hills({ flip=false, front="#EAF3E7", back="#DCE9DA", bg="transparent" }) {
   return (
     <div style={{ lineHeight:0, transform:flip?"scaleY(-1)":"none", background:bg, position:"relative", zIndex:1 }}>
       <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ width:"100%", height:80, display:"block" }}>
@@ -410,6 +597,100 @@ function Card({ children=null, style={}, accent=C.green }) {
 }
 
 /* ══════════════════════════════════════════
+   HERO MORNING — one scene, one story:
+   a reading desk standing in a meadow.
+   Left half stays clean for the words.
+══════════════════════════════════════════ */
+function SoftCloud({ top, right, scale=1, opacity=0.8, sway=26, dur=14, delay=0 }) {
+  return (
+    <div style={{ position:"absolute", top, right, transform:`scale(${scale})`, opacity, pointerEvents:"none" }}>
+      <div style={{ animation:`cloudSway ${dur}s ease-in-out ${delay}s infinite alternate` }}>
+      <svg width="200" height="64" viewBox="0 0 200 64">
+        <defs>
+          <linearGradient id="scl" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FFFFFF"/>
+            <stop offset="100%" stopColor="#EDF2EA"/>
+          </linearGradient>
+        </defs>
+        <g fill="url(#scl)">
+          <ellipse cx="55" cy="44" rx="48" ry="17"/>
+          <ellipse cx="102" cy="33" rx="44" ry="22"/>
+          <ellipse cx="150" cy="43" rx="42" ry="16"/>
+        </g>
+        <ellipse cx="100" cy="54" rx="82" ry="6" fill="#CBDCD4" opacity="0.3"/>
+      </svg>
+      </div>
+    </div>
+  );
+}
+
+function HeroMorning() {
+  return (
+    <div style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none" }} aria-hidden="true">
+      {/* calm sky — barely-there gradient */}
+      <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg,#F6EDD6 0%, #EEF1DE 45%, #E3EDDC 75%, #D9E8CF 100%)" }}/>
+
+      {/* small sun, tucked in the corner — a glow, not a planet */}
+      <div style={{ position:"absolute", top:-70, right:-50, width:300, height:300 }}>
+        <div style={{ position:"absolute", inset:0, borderRadius:"50%", background:"radial-gradient(circle,#FFF4CE 18%, rgba(250,226,160,0.55) 45%, rgba(250,226,160,0) 72%)" }}/>
+        <svg viewBox="0 0 300 300" width="100%" height="100%" style={{ animation:"sunSpin 120s linear infinite", transformOrigin:"center", opacity:0.4 }}>
+          <g stroke="#EFCB7F" strokeWidth="2.5" strokeLinecap="round">
+            {Array.from({length:8}).map((_,i)=>{
+              const a=(i/8)*Math.PI*2;
+              return <line key={i}
+                x1={150+Math.cos(a)*92} y1={150+Math.sin(a)*92}
+                x2={150+Math.cos(a)*116} y2={150+Math.sin(a)*116}/>;
+            })}
+          </g>
+        </svg>
+      </div>
+
+      {/* two quiet clouds — upper right only, far from the words */}
+      <SoftCloud top="9%"  right="26%" scale={1}    opacity={0.85} dur={16}/>
+      <SoftCloud top="22%" right="6%"  scale={0.65} opacity={0.55} dur={20} delay={2}/>
+
+      {/* one flock of birds, high and small */}
+      <div style={{ position:"absolute", top:"12%", left:0, animation:"birdFly 52s linear infinite" }}>
+        <svg width="34" height="12" viewBox="0 0 34 12">
+          <path d="M2 8 Q6 2 10 8 M10 8 Q14 2 18 8" stroke="#7C8A77" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.55"/>
+          <path d="M24 9 Q27 5 30 9" stroke="#7C8A77" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+
+      {/* one soft distant hill line, low — depth without drama */}
+      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ position:"absolute", bottom:96, left:0, width:"100%", height:90 }}>
+        <path d="M0,70 C260,30 540,78 820,48 C1080,22 1300,66 1440,42 L1440,90 L0,90 Z" fill="#BBD3B4" opacity="0.55"/>
+      </svg>
+
+      {/* the meadow — a gentle strip with flowers, nothing more */}
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ position:"absolute", bottom:0, left:0, width:"100%", height:112 }}>
+        <path d="M0,42 C300,14 640,58 960,32 C1180,15 1340,46 1440,30 L1440,120 L0,120 Z" fill="#9FBE8F"/>
+        <path d="M0,76 C360,52 760,90 1100,68 C1280,58 1390,76 1440,68 L1440,120 L0,120 Z" fill="#7BA26C"/>
+        {[[110,68,"#D96C4F"],[330,84,"#F2C24B"],[560,72,"#FFFFFF"],[800,88,"#D96C4F"],[1040,74,"#F2C24B"],[1270,84,"#FFFFFF"]].map(([x,y,c],i)=>(
+          <g key={i}>
+            <line x1={x} y1={y} x2={x} y2={Number(y)+11} stroke="#4E7845" strokeWidth="1.5"/>
+            <circle cx={x} cy={y} r="3" fill={String(c)}/>
+            <circle cx={x} cy={y} r="1.1" fill="#4E7845" opacity="0.5"/>
+          </g>
+        ))}
+        {[210,460,700,940,1180,1380].map((x,i)=>(
+          <g key={i} stroke="#4E7845" strokeWidth="1.3" strokeLinecap="round" opacity="0.6">
+            <path d={`M${x} 108 q-3 -9 -5 -12`} fill="none"/>
+            <path d={`M${x} 108 q1 -11 2 -13`} fill="none"/>
+            <path d={`M${x} 108 q4 -8 6 -10`} fill="none"/>
+          </g>
+        ))}
+      </svg>
+
+      {/* four pollen sparks, right half only */}
+      {[["58%","34%",0],["70%","52%",2],["82%","28%",4],["64%","64%",1.5]].map(([l,t,d],i)=>(
+        <div key={i} style={{ position:"absolute", left:l, top:t, width:4, height:4, borderRadius:"50%", background:"#F2CE82", boxShadow:"0 0 7px rgba(242,206,130,0.85)", opacity:0.6, animation:`pollen ${8+i}s ease-in-out ${d}s infinite` }}/>
+      ))}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
    HOME PAGE
 ══════════════════════════════════════════ */
 function HomePage() {
@@ -419,38 +700,20 @@ function HomePage() {
     window.addEventListener("mousemove",h); return()=>window.removeEventListener("mousemove",h);
   },[]);
 
-  const heroLines = [
-    { text:`<span style="color:#a78bfa">const</span> <span style="color:#79c0ff">developer</span> <span style="color:#e5e7eb">=</span> <span style="color:#e5e7eb">{</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">name</span><span style="color:#e5e7eb">:</span> <span style="color:#a5d6ff">"Abdullah Al Mamun"</span><span style="color:#666">,</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">role</span><span style="color:#e5e7eb">:</span> <span style="color:#a5d6ff">"Software Engineer"</span><span style="color:#666">,</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">company</span><span style="color:#e5e7eb">:</span> <span style="color:#a5d6ff">"Koalafi"</span><span style="color:#666">,</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">fuel</span><span style="color:#e5e7eb">:</span> <span style="color:#a5d6ff">["books", "tea", "quiet mornings"]</span><span style="color:#666">,</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">dream</span><span style="color:#e5e7eb">:</span> <span style="color:#a5d6ff">"Dr. Abdullah"</span><span style="color:#666">,</span>` },
-    { text:`&nbsp;&nbsp;<span style="color:#f97316">available</span><span style="color:#e5e7eb">:</span> <span style="color:#f47067">true</span><span style="color:#666">,</span>` },
-    { text:`<span style="color:#e5e7eb">}</span>` },
-    { text:``, color:"transparent" },
-    { text:`<span style="color:#4ade80">// ✓ a story, still compiling…</span>` },
-  ];
-
   return (
     <div>
-      {/* ═══ HERO — a Ghibli morning ═══ */}
-      <section style={{ background:"linear-gradient(180deg,#DFEEF1 0%, #EDF3E6 55%, #FBF6EC 100%)", minHeight:"100vh", display:"grid", gridTemplateColumns:"1.1fr 1fr", alignItems:"center", padding:"90px 60px 0", gap:60, position:"relative", overflow:"hidden" }}>
-        {/* sun glow */}
-        <div style={{ position:"absolute", top:"-12%", right:"8%", width:420, height:420, borderRadius:"50%", background:"radial-gradient(circle, rgba(255,232,170,0.85), rgba(255,232,170,0) 70%)", pointerEvents:"none", transform:`translate(${mx*-10}px,${my*-6}px)` }}/>
-        {/* clouds drift across the whole sky */}
-        <Cloud top="9%"  left="-12%" scale={1.15} dur={75} />
-        <Cloud top="20%" left="-25%" scale={0.7}  dur={95}  delay={-30} opacity={0.75}/>
-        <Cloud top="5%"  left="-40%" scale={0.5}  dur={110} delay={-60} opacity={0.6}/>
-        <Cloud top="32%" left="-18%" scale={0.9}  dur={85}  delay={-50} opacity={0.5}/>
+      {/* ═══ HERO — the reading desk in a painted morning ═══ */}
+      <section style={{ minHeight:"100vh", display:"grid", gridTemplateColumns:"1.05fr 1fr", alignItems:"center", padding:"90px 60px 0", gap:50, position:"relative", overflow:"hidden" }}>
+        {/* the painted morning — calm, composed */}
+        <HeroMorning/>
         {/* soot sprites peeking */}
         <SootSprite style={{ bottom:110, left:"6%", transform:`translate(${mx*8}px,${my*5}px)` }} dur={3.5}/>
         <SootSprite style={{ bottom:140, left:"10%", transform:`translate(${mx*14}px,${my*8}px)` }} size={15} dur={4.4} delay={0.6}/>
         <SootSprite style={{ bottom:95,  right:"14%", transform:`translate(${mx*-10}px,${my*6}px)` }} size={18} dur={3.9} delay={1.1}/>
 
-        {/* Left */}
+        {/* Left — the sentence of the whole site */}
         <div style={{ position:"relative", zIndex:3 }}>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:36}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:30}}>
             <span style={{fontSize:12,color:C.muted,letterSpacing:1.5,textTransform:"uppercase",fontWeight:500}}>Dhaka, Bangladesh</span>
             <span style={{width:3,height:3,borderRadius:"50%",background:C.border,display:"inline-block"}}/>
             <span style={{display:"inline-flex",alignItems:"center",gap:5,fontSize:12,color:"#16a34a",fontWeight:600}}>
@@ -459,31 +722,33 @@ function HomePage() {
             </span>
           </div>
 
-          <h1 style={{ fontSize:"clamp(48px,6.5vw,86px)", fontWeight:600, lineHeight:0.98, letterSpacing:"-0.03em", margin:"0 0 22px", color:C.ink, fontFamily:"'Fraunces',serif" }}>
-            Hey 👋<br/><span style={{ color:C.coral, fontStyle:"italic" }}>Abdullah</span>
+          <h1 style={{ fontSize:"clamp(42px,5.6vw,76px)", fontWeight:600, lineHeight:1.08, letterSpacing:"-0.03em", margin:"0 0 26px", color:C.ink, fontFamily:"'Fraunces',serif" }}>
+            I read,<br/>therefore I <RotatingWord/>
           </h1>
-          <p style={{ fontSize:"clamp(16px,1.8vw,20px)", color:C.muted, letterSpacing:"-0.01em", margin:"0 0 20px", lineHeight:1.4, fontWeight:400 }}>
-            Software Engineer · Fintech Developer · Reader of stories
+
+          <p style={{ fontSize:"clamp(16px,1.8vw,19px)", color:C.ink, letterSpacing:"-0.01em", margin:"0 0 14px", lineHeight:1.5, fontWeight:600, fontFamily:"'Fraunces',serif" }}>
+            Abdullah Al Mamun <span style={{ color:C.muted, fontWeight:400, fontStyle:"italic" }}>— software engineer @ Koalafi · researcher · reader</span>
           </p>
-          <p style={{ color:C.muted, fontSize:15.5, lineHeight:1.85, maxWidth:500, margin:"0 0 36px" }}>
-            Building enterprise-grade banking systems, scalable APIs, and AI-powered tools — with the calm of a person raised by books. Based in Dhaka, working globally. Specialised in <strong style={{ color:C.ink }}>Java · Spring Boot · React</strong>.
+          <p style={{ color:C.muted, fontSize:15.5, lineHeight:1.85, maxWidth:480, margin:"0 0 32px" }}>
+            Enterprise banking systems and AI tools by profession — built with the calm of a
+            person raised by books. From Himu's Dhaka to Murakami's wells, every page taught
+            me something I now write in <strong style={{ color:C.ink }}>Java · Spring Boot · React</strong>.
           </p>
+          <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
+            <a href="#projects" style={{ background:C.green, color:"#fff", padding:"13px 26px", borderRadius:30, textDecoration:"none", fontSize:13.5, fontWeight:700, boxShadow:`0 8px 24px ${C.green}44` }}>Open my projects ⌨️</a>
+            <a href="#story" style={{ background:"#fff", color:C.ink, padding:"13px 26px", borderRadius:30, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>Read my story</a>
+          </div>
         </div>
 
-        {/* Right — Crystal + typewriter */}
-        <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:18, position:"relative", zIndex:3, paddingBottom:40 }}>
-          <GhibliCrystal size={320}/>
-          <TypewriterTerminal title="~/about.js" lines={heroLines} style={{ width:"100%" }}/>
+        {/* Right — the reading desk, standing in the meadow */}
+        <div style={{ position:"relative", zIndex:3, alignSelf:"end", paddingBottom:64 }}>
+          <ReadingDesk mx={mx} my={my}/>
         </div>
 
-        {/* meadow at the bottom of the sky */}
-        <div style={{ position:"absolute", bottom:0, left:0, right:0, zIndex:1 }}>
-          <Hills front="#CFE3C4" back="#B9D6BC"/>
-        </div>
       </section>
 
       {/* ═══ THE STORY — chapters of a reading life ═══ */}
-      <section style={{ background:C.bg, padding:"90px 60px 70px", position:"relative", overflow:"hidden" }}>
+      <section id="story" style={{ background:C.bg, padding:"90px 60px 70px", position:"relative", overflow:"hidden" }}>
         <SootSprite style={{ top:60, right:"5%" }} size={16} dur={4.2}/>
         <SectionLabel color={C.coral}>The Story</SectionLabel>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start", marginBottom:56 }}>
@@ -599,27 +864,15 @@ function HomePage() {
 
       <Hills front="#fff" back="#EDE6D4" bg={C.bg}/>
 
-      {/* ═══ PROJECTS ═══ */}
-      <section style={{ background:"#fff", padding:"70px 60px 90px" }}>
+      {/* ═══ PROJECTS — THE IDE ═══ */}
+      <section id="projects" style={{ background:"#fff", padding:"70px 60px 90px", position:"relative", overflow:"hidden" }}>
+        <SootSprite style={{ top:54, right:"7%" }} size={15} dur={4.6}/>
         <SectionLabel color={C.coral}>Projects</SectionLabel>
-        <H2>Selected Work 🌱</H2>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
-          {PROJECTS.map((p,i)=>(
-            <Card key={i} accent={p.accent}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:18 }}>
-                <div style={{ fontSize:42 }}>{p.emoji}</div>
-                <Pill color={p.accent}>{p.label}</Pill>
-              </div>
-              <h3 style={{ fontSize:20, fontWeight:600, margin:"0 0 4px", color:C.ink, letterSpacing:"-0.02em", fontFamily:"'Fraunces',serif" }}>{p.title}</h3>
-              <p style={{ color:p.accent, fontSize:12, fontWeight:600, margin:"0 0 10px", letterSpacing:0.5 }}>{p.sub}</p>
-              <p style={{ color:C.muted, fontSize:14, lineHeight:1.75, margin:"0 0 16px" }}>{p.desc}</p>
-              <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:p.link?14:0 }}>
-                {p.tags.map(t=><span key={t} style={{ background:`${p.accent}12`, border:`1px solid ${p.accent}28`, color:p.accent, fontSize:11, fontWeight:600, padding:"3px 10px", borderRadius:20 }}>{t}</span>)}
-              </div>
-              {p.link && <a href={p.link} target="_blank" rel="noreferrer" style={{ color:p.accent, fontSize:12.5, fontWeight:700, textDecoration:"none" }}>Visit Live Site ↗</a>}
-            </Card>
-          ))}
-        </div>
+        <H2 style={{ margin:"0 0 14px" }}>Selected Work, <span style={{ color:C.coral, fontStyle:"italic" }}>opened in the editor</span></H2>
+        <p style={{ color:C.muted, fontSize:15, lineHeight:1.8, margin:"0 0 40px", maxWidth:560 }}>
+          The way an engineer actually shows his work — click a file in the explorer, hit ▶ Run on the live ones.
+        </p>
+        <ProjectIDE/>
       </section>
 
       <Hills front={C.bg} back="#EFE8D6" bg="#fff"/>
@@ -809,7 +1062,6 @@ export default function App() {
   useLeafCursor();
 
   useEffect(() => {
-    // storybook fonts
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:wght@400;500;600;700&display=swap";
@@ -854,11 +1106,9 @@ export default function App() {
 
       {/* ── FOOTER — forest twilight with fireflies ── */}
       <footer style={{ background:`linear-gradient(180deg, ${C.dark}, #1E2A22)`, padding:"40px 44px 32px", position:"relative", zIndex:1, overflow:"hidden" }}>
-        {/* stars */}
         {[["12%","20%"],["30%","60%"],["55%","30%"],["70%","70%"],["85%","25%"],["44%","15%"],["92%","55%"]].map(([l,t],i)=>(
           <div key={i} style={{ position:"absolute", left:l, top:t, width:2.5, height:2.5, borderRadius:"50%", background:"#fff", opacity:0.5, animation:`twinkle ${2+i*0.6}s ease-in-out ${i*0.4}s infinite` }}/>
         ))}
-        {/* fireflies */}
         {[["20%","45%"],["62%","55%"],["80%","40%"]].map(([l,t],i)=>(
           <div key={i} style={{ position:"absolute", left:l, top:t, width:5, height:5, borderRadius:"50%", background:C.gold, boxShadow:`0 0 10px ${C.gold}`, animation:`firefly ${5+i*1.5}s ease-in-out ${i}s infinite` }}/>
         ))}
@@ -894,11 +1144,53 @@ export default function App() {
           50%{transform:translate(-10px,-22px);opacity:0.5}
           75%{transform:translate(14px,-6px);opacity:0.9}
         }
+        /* ── the dreams that rise out of the open book ── */
+        @keyframes dreamRise{
+          0%   { transform:translateY(0) translateX(0) rotate(0deg) scale(0.55); opacity:0; }
+          14%  { opacity:0.9; }
+          55%  { transform:translateY(-78px) translateX(10px) rotate(7deg) scale(0.95); opacity:0.75; }
+          88%  { opacity:0.15; }
+          100% { transform:translateY(-132px) translateX(-8px) rotate(-5deg) scale(1); opacity:0; }
+        }
+        /* the page that keeps turning */
+        @keyframes pageTurn{
+          0%, 55%  { transform:scaleX(1) skewY(0deg); opacity:1; }
+          70%      { transform:scaleX(0.15) skewY(-8deg); opacity:0.7; }
+          85%      { transform:scaleX(-0.7) skewY(4deg); opacity:0.85; }
+          100%     { transform:scaleX(-1) skewY(0deg); opacity:0; }
+        }
+        .flipPage{ transform-origin:230px 280px; animation:pageTurn 6s ease-in-out infinite; }
+        /* tea steam */
+        @keyframes steamRise{
+          0%   { opacity:0; transform:translateY(4px); }
+          30%  { opacity:0.7; }
+          100% { opacity:0; transform:translateY(-14px); }
+        }
+        .steam{ animation:steamRise 3.4s ease-out infinite; }
+        .steam.s2{ animation-delay:1.6s; }
+        @keyframes sunSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+        @keyframes cloudSway{from{transform:translateX(0)}to{transform:translateX(30px)}}
+        @keyframes birdFly{
+          0%  { transform:translateX(-8vw) translateY(0); }
+          25% { transform:translateX(28vw) translateY(-14px); }
+          50% { transform:translateX(58vw) translateY(6px); }
+          75% { transform:translateX(85vw) translateY(-10px); }
+          100%{ transform:translateX(112vw) translateY(0); }
+        }
+        @keyframes pollen{
+          0%,100%{ transform:translate(0,0); opacity:0.25; }
+          30%    { opacity:0.85; }
+          50%    { transform:translate(14px,-22px); opacity:0.6; }
+          80%    { opacity:0.8; }
+        }
         *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
         html{scroll-behavior:smooth}
         ::-webkit-scrollbar{width:5px;background:${C.bg}}
         ::-webkit-scrollbar-thumb{background:#D6CBAF;border-radius:3px}
         button:hover{opacity:.88}
+        @media (max-width: 900px){
+          .bookGroup{ transform:scale(0.9); transform-origin:center; }
+        }
       `}</style>
     </div>
   );
