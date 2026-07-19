@@ -95,7 +95,7 @@ export function DashboardPage({ habits, diary }) {
           ))}
           <div style={{ marginTop:16, paddingTop:14, borderTop:"1px solid rgba(255,255,255,0.1)", fontFamily:FONT_MONO, fontSize:11.5, color:"rgba(255,255,255,0.45)", lineHeight:1.9 }}>
             <div><span style={{ color:C.termGreen }}>❯</span> mood: {todayDiary?.mood} · {todayDiary?.weather}</div>
-            <div><span style={{ color:C.termPurple }}>❯</span> next milestone: dr. abdullah 🎓</div>
+            <div><span style={{ color:C.termPurple }}>❯</span> next milestone: first translation published 🖋</div>
           </div>
         </Panel>
       </div>

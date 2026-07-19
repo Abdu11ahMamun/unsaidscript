@@ -124,8 +124,8 @@ export function LandingPage({ goTo }) {
             <div style={{ fontSize:11, letterSpacing:2.5, textTransform:"uppercase", color:C.coral, fontWeight:700, marginBottom:10 }}>✦ Door one</div>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontStyle:"italic", fontWeight:600, fontSize:"clamp(26px,2.6vw,36px)", color:C.ink, margin:"0 0 10px", letterSpacing:"-0.02em" }}>The Writer</h2>
             <p style={{ color:C.muted, fontSize:13.5, lineHeight:1.75, margin:"0 0 20px" }}>
-              Reviews written like letters, a reading life told in chapters, a translation
-              desk warming up — and one day, ইনশাআল্লাহ, a book of my own.
+              Reviews written like letters, a translation desk warming up, essays and
+              tutorials on the way — and one day, ইনশাআল্লাহ, a book of my own.
             </p>
             {/* the shelf — fans open on hover */}
             <div style={{ display:"flex", alignItems:"flex-end", gap:6, marginBottom:20, height:64 }}>
@@ -165,12 +165,12 @@ export function LandingPage({ goTo }) {
                 <div style={{ fontSize:11, letterSpacing:2.5, textTransform:"uppercase", color:C.termGreen, fontWeight:700, marginBottom:8, fontFamily:"'Fira Code',monospace" }}>❯ door two</div>
                 <div style={{ fontFamily:"'Fraunces',serif", fontWeight:600, fontSize:"clamp(24px,2.4vw,32px)", color:"#F3EEDF", letterSpacing:"-0.02em", marginBottom:8 }}>The Engineer</div>
                 <p style={{ color:"rgba(243,238,223,0.5)", fontSize:13, lineHeight:1.75, margin:"0 0 16px", fontFamily:"'Karla',sans-serif" }}>
-                  Banking systems, payment APIs and AI tools. Work history, selected
-                  projects and research — the part that pays for the ink.
+                  Banking systems, payment APIs and AI tools — open for freelance builds
+                  and consulting, and sharing research ideas in LLMs × fintech along the way.
                 </p>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
                   <span style={{ color:C.termGreen, fontWeight:600, fontSize:13.5 }}>./open --workbench {door==="engineer"?"⟶":"→"}</span>
-                  <span style={{ fontSize:10.5, color:"rgba(243,238,223,0.35)", border:"1px solid rgba(255,255,255,0.12)", borderRadius:20, padding:"3px 10px" }}>projects · research · cv</span>
+                  <span style={{ fontSize:10.5, color:"rgba(243,238,223,0.35)", border:"1px solid rgba(255,255,255,0.12)", borderRadius:20, padding:"3px 10px" }}>projects · freelance · research</span>
                 </div>
               </div>
             </TerminalWindow>

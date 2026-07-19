@@ -14,8 +14,8 @@ const LIFE_LINES = [
     jsx:<><span style={{color:"#a78bfa"}}>class</span>{" "}<span style={{color:"#79c0ff"}}>Abdullah</span>{" "}<span style={{color:"#a78bfa"}}>extends</span>{" "}<span style={{color:"#79c0ff"}}>Reader</span>{" "}<span style={{color:"#e5e7eb"}}>{"{"}</span></> },
   { raw:'  builds   = "banking systems @ Koalafi";',
     jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>builds</span>&nbsp;&nbsp;{" "}<span style={{color:"#e5e7eb"}}>=</span>{" "}<span style={{color:"#a5d6ff"}}>"banking systems @ Koalafi"</span><span style={{color:"#666"}}>;</span></> },
-  { raw:'  research = { papers: 5, goal: "Dr. Abdullah" };',
-    jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>research</span>{" "}<span style={{color:"#e5e7eb"}}>= {"{"}</span>{" "}<span style={{color:"#f97316"}}>papers</span><span style={{color:"#e5e7eb"}}>:</span>{" "}<span style={{color:"#fbbf24"}}>5</span><span style={{color:"#666"}}>,</span>{" "}<span style={{color:"#f97316"}}>goal</span><span style={{color:"#e5e7eb"}}>:</span>{" "}<span style={{color:"#a5d6ff"}}>"Dr. Abdullah"</span>{" "}<span style={{color:"#e5e7eb"}}>{"}"}</span><span style={{color:"#666"}}>;</span></> },
+  { raw:'  research = { papers: 5, next: "PhD" };',
+    jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>research</span>{" "}<span style={{color:"#e5e7eb"}}>= {"{"}</span>{" "}<span style={{color:"#f97316"}}>papers</span><span style={{color:"#e5e7eb"}}>:</span>{" "}<span style={{color:"#fbbf24"}}>5</span><span style={{color:"#666"}}>,</span>{" "}<span style={{color:"#f97316"}}>next</span><span style={{color:"#e5e7eb"}}>:</span>{" "}<span style={{color:"#a5d6ff"}}>"PhD"</span>{" "}<span style={{color:"#e5e7eb"}}>{"}"}</span><span style={{color:"#666"}}>;</span></> },
   { raw:'  fuel     = ["tea", "murakami", "quiet"];',
     jsx:<>&nbsp;&nbsp;<span style={{color:"#f97316"}}>fuel</span>&nbsp;&nbsp;&nbsp;&nbsp;{" "}<span style={{color:"#e5e7eb"}}>=</span>{" ["}
       <span style={{color:"#a5d6ff"}}>"tea"</span><span style={{color:"#666"}}>,</span>{" "}

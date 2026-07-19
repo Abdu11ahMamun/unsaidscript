@@ -3,7 +3,7 @@ const ITEMS = [
   ["অব্যক্ত","bn"],["spring boot","tech"],["হিমু","bn"],["murakami","lit"],
   ["java","tech"],["রবীন্দ্রনাথ","bn"],["react","tech"],["rumi","lit"],
   ["llm × fintech","tech"],["চা","bn"],["kafka","lit"],["clean code","tech"],
-  ["মিসির আলি","bn"],["microservices","tech"],["dr. abdullah — loading…","lit"],
+  ["মিসির আলি","bn"],["microservices","tech"],["অনুবাদ — at the desk","bn"],
 ];
 const Row = () => (
   <>

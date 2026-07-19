@@ -31,7 +31,7 @@ export const BOOKS = [
     quibbles:["Modern storyline is thinner","History smoothed for sweetness","Prose occasionally over-sugars"],
     similar:["kafka-on-the-shore","the-metamorphosis"],
     sections:[
-      { h:"The before and the after", p:["It was 2016. I was a teenager with a growing stack of storybooks and no particular direction. Somewhere between rule one and forty, the direction of my life bent."] },
+      { h:"The before and the after", p:["This book found me young — a reader with a growing stack of storybooks and no particular direction. Somewhere between rule one and forty, the direction bent."] },
       { h:"What it did to me", p:["It gave my restlessness a vocabulary. After finishing it I went looking for Rumi's actual poetry, then for the history, then for the Qur'an with fresh eyes — not as ritual but as a love letter I'd been skimming."] },
     ] },
   { slug:"the-metamorphosis", title:"The Metamorphosis", author:"Franz Kafka",
@@ -49,7 +49,7 @@ export const BOOKS = [
     similar:["kafka-on-the-shore","forty-rules-of-love"],
     sections:[
       { h:"The famous first morning", p:["Gregor Samsa wakes up transformed, and the most disturbing thing is his reaction: he worries about being late for work. Kafka wrote that in 1915 and it lands harder in 2026 than most fiction written this year."] },
-      { h:"Why this hit a middle-class Bengali son", p:["Strip away the insect and this is about a son whose entire identity is his usefulness. I'm a married man from a middle-class family. I know the quiet arithmetic of being needed."] },
+      { h:"Why this hits a Bengali son", p:["Strip away the insect and this is about a son whose entire identity is his usefulness. Anyone who grew up with the quiet arithmetic of being needed — of being the plan — will recognize this story immediately."] },
     ] },
 ];
 export const SHELF_REFS = {

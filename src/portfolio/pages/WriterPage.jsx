@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { C } from "../../tokens.js";
-import { BOOKS, NOTES, NOTE_CATEGORIES, CHAPTERS, TRANSLATION_DESK, TRANSLATION_PIPELINE } from "../data/index.js";
+import { BOOKS, NOTES, NOTE_CATEGORIES, WRITING_PATH, TRANSLATION_DESK, TRANSLATION_PIPELINE } from "../data/index.js";
 import { SectionLabel, Card, Pill, BookCover, Stars, H2 } from "../components/index.js";
 import { TerminalWindow, TLine, TComment, TPrompt } from "../components/TerminalWindow.jsx";
 import { Cloud, SootSprite, Hills } from "./helpers.jsx";
@@ -35,7 +35,7 @@ export function WriterPage({ openBook, showToast }) {
             </p>
             <div style={{ display:"flex", gap:12, flexWrap:"wrap", marginBottom:24 }}>
               <a href="#reviews" style={{ display:"inline-flex", alignItems:"center", gap:8, background:C.coral, color:"#fff", padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:700, boxShadow:`0 10px 30px ${C.coral}44` }}>📚 read the reviews</a>
-              <a href="#story" style={{ display:"inline-flex", alignItems:"center", background:"#fff", color:C.ink, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>my story in chapters →</a>
+              <a href="#path" style={{ display:"inline-flex", alignItems:"center", background:"#fff", color:C.ink, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>the road to the first book →</a>
             </div>
             <div style={{ display:"flex", gap:16, fontSize:12, color:C.muted, fontFamily:"'Fira Code',monospace", flexWrap:"wrap" }}>
               <span>📚 {BOOKS.length} reviews</span>
@@ -63,39 +63,41 @@ export function WriterPage({ openBook, showToast }) {
         </div>
       </section>
 
-      {/* ═══ THE STORY — chapters of a reading life ═══ */}
-      <section id="story" className="rvgroup" style={{ background:C.bg, padding:"80px 60px 70px", position:"relative", overflow:"hidden" }}>
+      {/* ═══ THE PATH — the road to the first book ═══ */}
+      <section id="path" className="rvgroup" style={{ background:C.bg, padding:"80px 60px 70px", position:"relative", overflow:"hidden" }}>
         <SootSprite style={{ top:60, right:"5%" }} size={16} dur={4.2}/>
-        <SectionLabel color={C.coral}>The Story</SectionLabel>
+        <SectionLabel color={C.coral}>The Path</SectionLabel>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start", marginBottom:56 }}>
           <div>
-            <H2 style={{ margin:"0 0 16px" }}>A life, told in<br/><span style={{ color:C.coral, fontStyle:"italic" }}>chapters</span></H2>
+            <H2 style={{ margin:"0 0 16px" }}>The road to the<br/><span style={{ color:C.coral, fontStyle:"italic" }}>first book</span></H2>
             <p style={{ color:C.muted, fontSize:15, lineHeight:1.85, maxWidth:480 }}>
-              Every engineer has a stack. Mine starts with a bookshelf. These are the pages
-              that built the person behind the code — and the dream the code is quietly carrying.
+              Nobody starts as an author. There's a craft ladder, and I'm climbing it in
+              public — reviews first, then translation, then essays, and someday a spine
+              with my name on it. Here's the whole route.
             </p>
           </div>
-          <TerminalWindow title="soul.log">
-            <TPrompt>cat life.log | tail -4</TPrompt>
-            <TLine color={C.termYellow}>{"[2014] first book opened — process started"}</TLine>
-            <TLine color={C.termBlue}>{"[2016] fell in love: state = irreversible"}</TLine>
-            <TLine color={C.termPurple}>{"[teen] himu.walk(barefoot) → rabindranath.read()"}</TLine>
-            <TLine color={C.termGreen}>{"[now ] bridge.build(passion, responsibility)"}</TLine>
+          <TerminalWindow title="path.log">
+            <TPrompt>cat ./writer/path.log</TPrompt>
+            <TLine color={C.termYellow}>{"[always] reader — shelf keeps growing"}</TLine>
+            <TLine color={C.termGreen}>{"[now   ] reviewer — reviews live on the shelf"}</TLine>
+            <TLine color={C.termBlue}>{"[next  ] translator — English ⇄ বাংলা"}</TLine>
+            <TLine color={C.termPurple}>{"[then  ] essayist — articles · tutorials · research"}</TLine>
+            <TComment>{"[someday] author — a book of my own"}</TComment>
           </TerminalWindow>
         </div>
 
-        {/* chapter timeline */}
+        {/* the path, stage by stage */}
         <div style={{ position:"relative", maxWidth:900, margin:"0 auto" }}>
           <div style={{ position:"absolute", left:27, top:10, bottom:10, width:2, background:`linear-gradient(180deg,${C.gold},${C.coral},${C.sky},${C.green},${C.gold})`, opacity:0.4, borderRadius:2 }}/>
-          {CHAPTERS.map((ch,i)=>(
-            <div key={i} style={{ display:"flex", gap:24, marginBottom: i<CHAPTERS.length-1?36:0, position:"relative" }}>
-              <div style={{ width:56, height:56, borderRadius:"50%", background:"#fff", border:`2px solid ${ch.color}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0, boxShadow:`0 4px 18px ${ch.color}22`, zIndex:1 }}>{ch.icon}</div>
-              <Card accent={ch.color} style={{ flex:1, padding:"24px 28px" }}>
+          {WRITING_PATH.map((st,i)=>(
+            <div key={i} style={{ display:"flex", gap:24, marginBottom: i<WRITING_PATH.length-1?36:0, position:"relative" }}>
+              <div style={{ width:56, height:56, borderRadius:"50%", background:"#fff", border:`2px solid ${st.color}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0, boxShadow:`0 4px 18px ${st.color}22`, zIndex:1 }}>{st.icon}</div>
+              <Card accent={st.color} style={{ flex:1, padding:"24px 28px" }}>
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8, flexWrap:"wrap", gap:8 }}>
-                  <h3 style={{ fontSize:20, fontWeight:600, margin:0, color:C.ink, fontFamily:"'Fraunces',serif", fontStyle:"italic" }}>{ch.title}</h3>
-                  <Pill color={ch.color}>{ch.year}</Pill>
+                  <h3 style={{ fontSize:20, fontWeight:600, margin:0, color:C.ink, fontFamily:"'Fraunces',serif", fontStyle:"italic" }}>{st.title}</h3>
+                  <Pill color={st.color}>{st.stage} · {st.status}</Pill>
                 </div>
-                <p style={{ color:C.muted, fontSize:14.5, lineHeight:1.85, margin:0 }}>{ch.text}</p>
+                <p style={{ color:C.muted, fontSize:14.5, lineHeight:1.85, margin:0 }}>{st.text}</p>
               </Card>
             </div>
           ))}

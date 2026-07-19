@@ -7,7 +7,7 @@ export function CommandPalette({ open, onClose, goTo, showToast, openBook }) {
   const ITEMS = [
     { icon:"✍️", label:"The Writer — reviews, translations, notes", hint:"page", run:()=>{ onClose(); goTo("/writer"); } },
     { icon:"⚙️", label:"The Engineer — work, projects, research", hint:"page", run:()=>{ onClose(); goTo("/engineer"); } },
-    { icon:"📖", label:"Read my story in chapters", hint:"writer", run:()=>jump("/writer","story") },
+    { icon:"📖", label:"The road to the first book", hint:"writer", run:()=>jump("/writer","path") },
     { icon:"🖋", label:"Visit the translation desk", hint:"writer", run:()=>jump("/writer","translations") },
     { icon:"⌨️", label:"Jump to projects — the IDE", hint:"engineer", run:()=>jump("/engineer","projects") },
     { icon:"🎓", label:"See publications", hint:"engineer", run:()=>jump("/engineer","research") },
