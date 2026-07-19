@@ -9,6 +9,6 @@ export const CHAPTERS = [
     text:"Murakami felt like a magician holding a pen — I kept finding real life hidden inside his strange wells and parallel moons. Kafka gave my old questions a name. And then, like Kafka, I learned to accept everything as it is." },
   { year:"Now", icon:"🌉", color:C.green, title:"Building the Bridge",
     text:"A married man from a middle-class family doesn't get to abandon everything for passion. So I'm building a bridge instead: engineering that pays for the life, writing and books that give it meaning. This site is that bridge." },
-  { year:"The Dream", icon:"🎓", color:C.gold, title:"Dr. Abdullah",
-    text:"A PhD in LLMs × fintech. It's not a career goal — it's the sacred thing that keeps me moving. One day, someone will say 'Dr. Abdullah' and the whole long road will have been worth it." },
+  // { year:"The Dream", icon:"🎓", color:C.gold, title:"Dr. Abdullah",
+  //   text:"A PhD in LLMs × fintech. It's not a career goal — it's the sacred thing that keeps me moving. One day, someone will say 'Dr. Abdullah' and the whole long road will have been worth it." },
 ];

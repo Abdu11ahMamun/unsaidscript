@@ -68,7 +68,7 @@ export function HomePage() {
             <span>⎇ dhaka</span>
             <span>{daypart[0]}</span>
             <span>{daypart[1]}</span>
-            <span>🎓 next: dr. abdullah</span>
+            {/* <span>🎓 next: dr. abdullah</span> */}
           </div>
         </div>
 
@@ -228,7 +228,7 @@ export function HomePage() {
               <TLine color={C.termYellow}>{">"} ICCECE · 2 papers</TLine>
               <TLine color={C.termPurple}>{">"} Int. Conference · 1 paper</TLine>
               <TPrompt>echo $NEXT_MILESTONE</TPrompt>
-              <TLine color={C.termGreen}>{'> "PhD — Dr. Abdullah" 🎓'}</TLine>
+              {/* <TLine color={C.termGreen}>{'> "PhD — Dr. Abdullah" 🎓'}</TLine> */}
             </TerminalWindow>
           </div>
           <div style={{ display:"flex", flexDirection:"column" }}>
