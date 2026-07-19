@@ -6,7 +6,7 @@ import { LifeScript } from "../components/LifeScript.jsx";
 import { Marquee } from "../components/Marquee.jsx";
 import { Cloud, Hills, SootSprite } from "./helpers.jsx";
 
-export function HomePage() {
+export function HomePage({ goTo }) {
   const [mx,setMx]=useState(0),[my,setMy]=useState(0);
   /* the status line reads the visitor's clock */
   const hour = new Date().getHours();
@@ -60,7 +60,7 @@ export function HomePage() {
 
           <div style={{ display:"flex", gap:12, flexWrap:"wrap", marginBottom:26 }}>
             <a href="#projects" style={{ display:"inline-flex", alignItems:"center", gap:8, background:C.termBg, color:C.termGreen, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:700, fontFamily:"'Fira Code',monospace", border:"1px solid rgba(255,255,255,0.08)", boxShadow:"0 10px 30px rgba(13,17,23,0.25)" }}>❯ open the projects</a>
-            <a href="#story" style={{ display:"inline-flex", alignItems:"center", background:"#fff", color:C.ink, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>read my story →</a>
+            <a href="/writer" onClick={(e)=>{ e.preventDefault(); goTo?.("/writer"); }} style={{ display:"inline-flex", alignItems:"center", background:"#fff", color:C.ink, padding:"13px 24px", borderRadius:12, textDecoration:"none", fontSize:13.5, fontWeight:600, border:`1.5px solid ${C.border}` }}>read my story →</a>
           </div>
 
           {/* a tiny status line — the day, as a dev sees it */}
@@ -84,46 +84,7 @@ export function HomePage() {
       {/* ═══ the two languages of one person ═══ */}
       <Marquee/>
 
-      {/* ═══ THE STORY — chapters of a reading life ═══ */}
-      <section id="story" style={{ background:C.bg, padding:"90px 60px 70px", position:"relative", overflow:"hidden" }}>
-        {/* <SootSprite style={{ top:60, right:"5%" }} size={16} dur={4.2}/>
-        <SectionLabel color={C.coral}>The Story</SectionLabel> */}
-        {/* <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start", marginBottom:56 }}>
-          <div>
-            <H2 style={{ margin:"0 0 16px" }}>A life, told in<br/><span style={{ color:C.coral, fontStyle:"italic" }}>chapters</span></H2>
-            <p style={{ color:C.muted, fontSize:15, lineHeight:1.85, maxWidth:480 }}>
-              Every engineer has a stack. Mine starts with a bookshelf. These are the pages that built the person behind the code — and the dream the code is quietly carrying.
-            </p>
-          </div>
-          <TerminalWindow title="soul.log">
-            <TPrompt>cat life.log | tail -5</TPrompt>
-            <TLine color={C.termYellow}>{"[2014] first book opened — process started"}</TLine>
-            <TLine color={C.termBlue}>{"[2016] fell in love: state = irreversible"}</TLine>
-            <TLine color={C.termPurple}>{"[teen] himu.walk(barefoot) → rabindranath.read()"}</TLine>
-            <TLine color={C.termGreen}>{"[now ] bridge.build(passion, responsibility)"}</TLine>
-            <TPrompt>echo $DREAM</TPrompt>
-            <TLine color={C.termGreen}>{'> "Dr. Abdullah" — loading… ▓▓▓▓▓░░░░░'}</TLine>
-          </TerminalWindow>
-        </div> */}
-
-        {/* chapter timeline */}
-        {/* <div style={{ position:"relative", maxWidth:900, margin:"0 auto" }}>
-          <div style={{ position:"absolute", left:27, top:10, bottom:10, width:2, background:`linear-gradient(180deg,${C.gold},${C.coral},${C.sky},${C.green},${C.gold})`, opacity:0.4, borderRadius:2 }}/>
-          {CHAPTERS.map((ch,i)=>(
-            <div key={i} style={{ display:"flex", gap:24, marginBottom: i<CHAPTERS.length-1?36:0, position:"relative" }}>
-              <div style={{ width:56, height:56, borderRadius:"50%", background:"#fff", border:`2px solid ${ch.color}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0, boxShadow:`0 4px 18px ${ch.color}22`, zIndex:1 }}>{ch.icon}</div>
-              <Card accent={ch.color} style={{ flex:1, padding:"24px 28px" }}>
-                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8, flexWrap:"wrap", gap:8 }}>
-                  <h3 style={{ fontSize:20, fontWeight:600, margin:0, color:C.ink, fontFamily:"'Fraunces',serif", fontStyle:"italic" }}>{ch.title}</h3>
-                  <Pill color={ch.color}>{ch.year}</Pill>
-                </div>
-                <p style={{ color:C.muted, fontSize:14.5, lineHeight:1.85, margin:0 }}>{ch.text}</p>
-              </Card>
-            </div>
-          ))}
-        </div> */}
-      </section>
-
+      {/* the reading-life story now lives on /writer — this page stays all engineer */}
       <Hills front="#fff" back="#EDE6D4" bg={C.bg}/>
 
       {/* ═══ EXPERIENCE ═══ */}

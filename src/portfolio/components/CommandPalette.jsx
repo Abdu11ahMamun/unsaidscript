@@ -3,13 +3,15 @@ import { C } from "../../tokens.js";
 export function CommandPalette({ open, onClose, goTo, showToast, openBook }) {
   const [q, setQ] = useState(""); const [sel, setSel] = useState(0);
   const inputRef = useRef(null);
-  const jump = (id) => { onClose(); goTo("home"); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }), 320); };
+  const jump = (path, id) => { onClose(); goTo(path); setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }), 320); };
   const ITEMS = [
-    { icon:"⌨️", label:"Jump to projects — the IDE", hint:"home", run:()=>jump("projects") },
-    { icon:"📖", label:"Read my story", hint:"home", run:()=>jump("story") },
-    { icon:"🎓", label:"See publications", hint:"home", run:()=>jump("research") },
-    { icon:"✍️", label:"Open writing & book reviews", hint:"page", run:()=>{ onClose(); goTo("writing"); } },
-    { icon:"🏠", label:"Go home", hint:"page", run:()=>{ onClose(); goTo("home"); } },
+    { icon:"✍️", label:"The Writer — reviews, translations, notes", hint:"page", run:()=>{ onClose(); goTo("/writer"); } },
+    { icon:"⚙️", label:"The Engineer — work, projects, research", hint:"page", run:()=>{ onClose(); goTo("/engineer"); } },
+    { icon:"📖", label:"Read my story in chapters", hint:"writer", run:()=>jump("/writer","story") },
+    { icon:"🖋", label:"Visit the translation desk", hint:"writer", run:()=>jump("/writer","translations") },
+    { icon:"⌨️", label:"Jump to projects — the IDE", hint:"engineer", run:()=>jump("/engineer","projects") },
+    { icon:"🎓", label:"See publications", hint:"engineer", run:()=>jump("/engineer","research") },
+    { icon:"🏠", label:"Go home — the two doors", hint:"page", run:()=>{ onClose(); goTo("/"); } },
     { icon:"✉️", label:"Copy email — cs.abdullah.mamun@gmail.com", hint:"copy", run:()=>{ navigator.clipboard?.writeText("cs.abdullah.mamun@gmail.com"); showToast("email copied ✓"); onClose(); } },
     { icon:"🌐", label:"Visit AAIINS Lab", hint:"↗", run:()=>{ window.open("https://aaiins-lab.com/","_blank"); onClose(); } },
     ...(openBook ? [

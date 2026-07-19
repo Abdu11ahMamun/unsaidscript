@@ -1,3 +1,4 @@
+export * from "./LandingPage.jsx";
+export * from "./WriterPage.jsx";
 export * from "./HomePage.jsx";
-export * from "./WritingPage.jsx";
 export * from "./ReviewPage.jsx";

@@ -1,57 +1,70 @@
 import { useState, useEffect } from "react";
-import { C, FONT_BODY } from "../tokens.js";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, useParams } from "react-router-dom";
+import { C } from "../tokens.js";
+import { BOOKS } from "./data/index.js";
 import { Logo } from "./components/index.js";
 import { CommandPalette } from "./components/CommandPalette.jsx";
-import { Marquee } from "./components/Marquee.jsx";
 import { useLeafCursor } from "./hooks/useLeafCursor.js";
+import { LandingPage } from "./pages/LandingPage.jsx";
+import { WriterPage } from "./pages/WriterPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
-import { WritingPage } from "./pages/WritingPage.jsx";
 import { ReviewPage } from "./pages/ReviewPage.jsx";
 
-const PORTFOLIO_CSS = `
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-  @keyframes drift{from{transform:translateX(0)}to{transform:translateX(130vw)}}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  @keyframes twinkle{0%,100%{opacity:0.15}50%{opacity:0.8}}
-  @keyframes firefly{0%,100%{transform:translate(0,0);opacity:0.3}25%{transform:translate(18px,-12px);opacity:1}50%{transform:translate(-10px,-22px);opacity:0.5}75%{transform:translate(14px,-6px);opacity:0.9}}
-  @keyframes marquee{ to{ transform:translateX(-50%); } }
-  .marqueeTrack{ animation:marquee 38s linear infinite; }
-  .marqueeWrap:hover .marqueeTrack{ animation-play-state:paused; }
-  @keyframes palettePop{from{opacity:0;transform:scale(0.97) translateY(-6px)}to{opacity:1;transform:scale(1) translateY(0)}}
-  .rv{ opacity:0; transform:translateY(26px); transition:opacity .75s ease, transform .75s ease; }
-  .rv.rvin{ opacity:1; transform:none; }
-  .dropcap::first-letter{ font-family:'Fraunces',serif; font-weight:600; font-size:64px; line-height:0.8; float:left; padding:8px 12px 0 0; color:inherit; }
-  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
-  html{scroll-behavior:smooth}
-  ::-webkit-scrollbar{width:5px;background:${C.bg}}
-  ::-webkit-scrollbar-thumb{background:#D6CBAF;border-radius:3px}
-  button:hover{opacity:.88}
-`;
+const NAV = [["/", "Home"], ["/writer", "The Writer"], ["/engineer", "The Engineer"]];
 
-export default function PortfolioApp() {
-  const [page,setPage]=useState("home");
-  const [fading,setFading]=useState(false);
-  const [paletteOpen,setPaletteOpen]=useState(false);
-  const [toast,setToast]=useState("");
-  const [book,setBook]=useState(null);
+/* per-route SEO — real titles & descriptions for every URL */
+function useSeo(pathname) {
+  useEffect(() => {
+    let title = "Abdullah Al Mamun — Writer & Software Engineer | unsaidscript";
+    let desc = "One person, two scripts. Book reviews, translations and writing on one side; fintech engineering in Java, Spring Boot and React on the other.";
+    if (pathname.startsWith("/writer")) {
+      title = "The Writer — Book Reviews, Translations & Notes | unsaidscript";
+      desc = "Honest book reviews from Rumi to Rabindranath to Murakami, a translation desk (English ⇄ বাংলা), and notes on research, tutorials and opinions.";
+    } else if (pathname.startsWith("/engineer")) {
+      title = "The Engineer — Java · Spring Boot · React | Abdullah Al Mamun";
+      desc = "Software engineer @ Koalafi. Fintech systems, banking APIs, AI tools — work history, selected projects and research publications.";
+    } else if (pathname.startsWith("/reviews/")) {
+      const book = BOOKS.find(b => b.slug === pathname.split("/reviews/")[1]);
+      if (book) {
+        title = `${book.title} by ${book.author} — Book Review | unsaidscript`;
+        desc = book.verdict;
+      }
+    }
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", desc);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", desc);
+  }, [pathname]);
+}
+
+function ReviewRoute({ goTo }) {
+  const { slug } = useParams();
+  if (!BOOKS.some(b => b.slug === slug)) return <Navigate to="/writer" replace/>;
+  return <ReviewPage slug={slug} openBook={(s)=>goTo(`/reviews/${s}`)} closeBook={()=>goTo("/writer")}/>;
+}
+
+function Shell() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [fading, setFading] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [toast, setToast] = useState("");
   useLeafCursor();
+  useSeo(location.pathname);
 
-  const openBook = (slug) => {
+  const goTo = (path) => {
+    if (path === location.pathname) return;
     setFading(true);
-    setTimeout(()=>{ setBook(slug); setPage("writing"); setFading(false); window.scrollTo(0,0); }, 220);
-  };
-  const closeBook = () => {
-    setFading(true);
-    setTimeout(()=>{ setBook(null); setPage("writing"); setFading(false); window.scrollTo(0,0); }, 220);
+    setTimeout(() => { navigate(path); setFading(false); window.scrollTo(0, 0); }, 220);
   };
 
-  const showToast = (msg) => { setToast(msg); setTimeout(()=>setToast(""), 2200); };
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2200); };
+  const openBook = (slug) => goTo(`/reviews/${slug}`);
 
   /* ⌘K / Ctrl+K opens the palette */
   useEffect(() => {
     const onKey = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPaletteOpen(o=>!o); }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPaletteOpen(o => !o); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -73,7 +86,7 @@ export default function PortfolioApp() {
       return () => io.disconnect();
     }, 80);
     return () => clearTimeout(t);
-  }, [page, book]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -83,14 +96,7 @@ export default function PortfolioApp() {
     return () => { document.head.removeChild(link); };
   }, []);
 
-  const goTo=(p)=>{
-    if(p===page && !book)return;
-    setFading(true);
-    setTimeout(()=>{setPage(p);setBook(null);setFading(false);window.scrollTo(0,0);},220);
-  };
-
-  const PAGES={home:<HomePage/>,writing:<WritingPage openBook={openBook} showToast={showToast}/>};
-  const NAV=[["home","Home"],["writing","Writing"]];
+  const isActive = (path) => path === "/" ? location.pathname === "/" : location.pathname.startsWith(path) || (path === "/writer" && location.pathname.startsWith("/reviews"));
 
   return (
     <div style={{ background:C.bg, color:C.ink, fontFamily:"'Karla','SF Pro Display',system-ui,sans-serif", minHeight:"100vh", overflowX:"hidden" }}>
@@ -99,10 +105,10 @@ export default function PortfolioApp() {
 
       {/* ── NAV ── */}
       <nav style={{ position:"fixed", inset:"0 0 auto 0", zIndex:1000, background:"rgba(251,246,236,0.92)", backdropFilter:"blur(24px)", borderBottom:`1px solid ${C.border}`, height:60, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 44px" }}>
-        <div onClick={()=>goTo("home")}><Logo/></div>
+        <div onClick={()=>goTo("/")} style={{ cursor:"pointer" }}><Logo/></div>
         <div style={{ display:"flex", gap:2 }}>
-          {NAV.map(([id,label])=>(
-            <button key={id} onClick={()=>goTo(id)} style={{ background:"none", border:"none", color:page===id?C.ink:C.muted, padding:"7px 18px", cursor:"pointer", fontSize:14, fontWeight:page===id?700:400, borderRadius:20, transition:"all .2s", borderBottom:page===id?`2px solid ${C.coral}`:"2px solid transparent" }}>{label}</button>
+          {NAV.map(([path,label])=>(
+            <button key={path} onClick={()=>goTo(path)} style={{ background:"none", border:"none", color:isActive(path)?C.ink:C.muted, padding:"7px 18px", cursor:"pointer", fontSize:14, fontWeight:isActive(path)?700:400, borderRadius:20, transition:"all .2s", borderBottom:isActive(path)?`2px solid ${C.coral}`:"2px solid transparent" }}>{label}</button>
           ))}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
@@ -119,7 +125,13 @@ export default function PortfolioApp() {
 
       {/* ── CONTENT ── */}
       <div style={{ paddingTop:60, position:"relative", zIndex:1, opacity:fading?0:1, transform:fading?"translateY(8px)":"none", transition:"opacity .22s, transform .22s" }}>
-        {book ? <ReviewPage slug={book} openBook={openBook} closeBook={closeBook}/> : PAGES[page]}
+        <Routes>
+          <Route path="/" element={<LandingPage goTo={goTo}/>}/>
+          <Route path="/writer" element={<WriterPage openBook={openBook} showToast={showToast}/>}/>
+          <Route path="/engineer" element={<HomePage goTo={goTo}/>}/>
+          <Route path="/reviews/:slug" element={<ReviewRoute goTo={goTo}/>}/>
+          <Route path="*" element={<Navigate to="/" replace/>}/>
+        </Routes>
       </div>
 
       {/* ── COMMAND PALETTE + TOAST ── */}
@@ -150,8 +162,8 @@ export default function PortfolioApp() {
             <span style={{ fontWeight:700, fontSize:14, color:"rgba(255,255,255,0.9)", fontFamily:"'Fraunces',serif" }}>unsaidscript</span>
           </div>
           <div style={{ display:"flex", gap:16 }}>
-            {NAV.map(([id,label])=>(
-              <button key={id} onClick={()=>goTo(id)} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.4)", cursor:"pointer", fontSize:13 }}>{label}</button>
+            {NAV.map(([path,label])=>(
+              <button key={path} onClick={()=>goTo(path)} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.4)", cursor:"pointer", fontSize:13 }}>{label}</button>
             ))}
           </div>
           <span style={{ fontSize:12, color:"rgba(255,255,255,0.28)", fontStyle:"italic" }}>© 2026 unsaidscript · written, not just built · Abdullah Al Mamun</span>
@@ -194,5 +206,13 @@ export default function PortfolioApp() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function PortfolioApp() {
+  return (
+    <BrowserRouter>
+      <Shell/>
+    </BrowserRouter>
   );
 }

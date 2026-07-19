@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "unsaidscript-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/abdullahalmamun/git-project/unsaidscript",
+      "port": 5173
+    }
+  ]
+}

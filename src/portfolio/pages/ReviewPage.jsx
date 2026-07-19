@@ -29,7 +29,7 @@ export function ReviewPage({ slug, openBook, closeBook }) {
 
         <button onClick={closeBook} style={{ background:"none", border:"none", color:C.muted, fontSize:13, fontFamily:"'Fira Code',monospace", cursor:"pointer", padding:0, marginBottom:38, display:"inline-flex", alignItems:"center", gap:8 }}
           onMouseEnter={e=>e.currentTarget.style.color=book.accent} onMouseLeave={e=>e.currentTarget.style.color=C.muted}>
-          ← cd ../writing
+          ← cd ../writer
         </button>
 
         <div style={{ display:"grid", gridTemplateColumns:"auto 1fr", gap:56, alignItems:"center", maxWidth:1020 }}>
