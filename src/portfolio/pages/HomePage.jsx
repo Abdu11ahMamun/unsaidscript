@@ -86,9 +86,9 @@ export function HomePage() {
 
       {/* ═══ THE STORY — chapters of a reading life ═══ */}
       <section id="story" style={{ background:C.bg, padding:"90px 60px 70px", position:"relative", overflow:"hidden" }}>
-        <SootSprite style={{ top:60, right:"5%" }} size={16} dur={4.2}/>
-        <SectionLabel color={C.coral}>The Story</SectionLabel>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start", marginBottom:56 }}>
+        {/* <SootSprite style={{ top:60, right:"5%" }} size={16} dur={4.2}/>
+        <SectionLabel color={C.coral}>The Story</SectionLabel> */}
+        {/* <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:60, alignItems:"start", marginBottom:56 }}>
           <div>
             <H2 style={{ margin:"0 0 16px" }}>A life, told in<br/><span style={{ color:C.coral, fontStyle:"italic" }}>chapters</span></H2>
             <p style={{ color:C.muted, fontSize:15, lineHeight:1.85, maxWidth:480 }}>
@@ -104,10 +104,10 @@ export function HomePage() {
             <TPrompt>echo $DREAM</TPrompt>
             <TLine color={C.termGreen}>{'> "Dr. Abdullah" — loading… ▓▓▓▓▓░░░░░'}</TLine>
           </TerminalWindow>
-        </div>
+        </div> */}
 
         {/* chapter timeline */}
-        <div style={{ position:"relative", maxWidth:900, margin:"0 auto" }}>
+        {/* <div style={{ position:"relative", maxWidth:900, margin:"0 auto" }}>
           <div style={{ position:"absolute", left:27, top:10, bottom:10, width:2, background:`linear-gradient(180deg,${C.gold},${C.coral},${C.sky},${C.green},${C.gold})`, opacity:0.4, borderRadius:2 }}/>
           {CHAPTERS.map((ch,i)=>(
             <div key={i} style={{ display:"flex", gap:24, marginBottom: i<CHAPTERS.length-1?36:0, position:"relative" }}>
@@ -121,7 +121,7 @@ export function HomePage() {
               </Card>
             </div>
           ))}
-        </div>
+        </div> */}
       </section>
 
       <Hills front="#fff" back="#EDE6D4" bg={C.bg}/>
