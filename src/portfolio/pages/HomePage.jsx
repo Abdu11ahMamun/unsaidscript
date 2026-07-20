@@ -205,7 +205,14 @@ export function HomePage({ goTo }) {
                   <span style={{ fontSize:11, fontWeight:700, color:C.muted }}>{p.year}</span>
                   <Pill color={p.tag==="Journal"?C.coral:C.sky}>{p.tag}</Pill>
                 </div>
-                <div style={{ fontSize:14, fontWeight:700, color:C.ink, lineHeight:1.45, marginBottom:3 }}>{p.title}</div>
+                <div style={{ fontSize:14, fontWeight:700, color:C.ink, lineHeight:1.45, marginBottom:3 }}>
+                  {p.url ? (
+                    <a href={p.url} target="_blank" rel="noreferrer" style={{ color:"inherit", textDecoration:"none" }}
+                      onMouseEnter={e=>e.currentTarget.style.textDecoration="underline"} onMouseLeave={e=>e.currentTarget.style.textDecoration="none"}>
+                      {p.title} <span style={{ fontSize:11, color:C.coral }}>↗</span>
+                    </a>
+                  ) : p.title}
+                </div>
                 <div style={{ fontSize:12, color:C.muted }}>{p.venue}</div>
               </div>
             ))}
@@ -271,9 +278,19 @@ export function HomePage({ goTo }) {
             <p style={{ color:C.muted, fontSize:15, lineHeight:1.8, margin:"0 0 32px" }}>
               Open to fintech roles, backend engineering, AI projects, and full-stack freelance work. Remote or Dhaka-based.
             </p>
-            {[["📧","cs.abdullah.mamun@gmail.com"],["📍","Dhaka, Bangladesh · Remote OK"],["⚡","Replies within 24 hours"]].map(([ic,v])=>(
+            {[
+              ["📧","cs.abdullah.mamun@gmail.com","mailto:cs.abdullah.mamun@gmail.com"],
+              ["💼","linkedin.com/in/abdu11ahmamun","https://www.linkedin.com/in/abdu11ahmamun/"],
+              ["📍","Dhaka, Bangladesh · Remote OK",null],
+              ["⚡","Replies within 24 hours",null],
+            ].map(([ic,v,href])=>(
               <div key={v} style={{ display:"flex", gap:12, marginBottom:14, fontSize:14, color:C.muted }}>
-                <span>{ic}</span><span>{v}</span>
+                <span>{ic}</span>
+                {href ? (
+                  <a href={href} target="_blank" rel="noreferrer" style={{ color:C.muted, textDecoration:"none" }}
+                    onMouseEnter={e=>{e.currentTarget.style.color=C.coral; e.currentTarget.style.textDecoration="underline";}}
+                    onMouseLeave={e=>{e.currentTarget.style.color=C.muted; e.currentTarget.style.textDecoration="none";}}>{v}</a>
+                ) : <span>{v}</span>}
               </div>
             ))}
           </div>

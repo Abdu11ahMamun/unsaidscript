@@ -13,6 +13,7 @@ export function CommandPalette({ open, onClose, goTo, showToast, openBook }) {
     { icon:"🎓", label:"See publications", hint:"engineer", run:()=>jump("/engineer","research") },
     { icon:"🏠", label:"Go home — the two doors", hint:"page", run:()=>{ onClose(); goTo("/"); } },
     { icon:"✉️", label:"Copy email — cs.abdullah.mamun@gmail.com", hint:"copy", run:()=>{ navigator.clipboard?.writeText("cs.abdullah.mamun@gmail.com"); showToast("email copied ✓"); onClose(); } },
+    { icon:"💼", label:"Open LinkedIn — linkedin.com/in/abdu11ahmamun", hint:"↗", run:()=>{ window.open("https://www.linkedin.com/in/abdu11ahmamun/","_blank"); onClose(); } },
     { icon:"🌐", label:"Visit AAIINS Lab", hint:"↗", run:()=>{ window.open("https://aaiins-lab.com/","_blank"); onClose(); } },
     ...(openBook ? [
       { icon:"📕", label:"Read: Kafka on the Shore", hint:"book", run:()=>{ onClose(); openBook("kafka-on-the-shore"); } },
