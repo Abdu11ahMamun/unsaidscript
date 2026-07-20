@@ -3,13 +3,34 @@ import { C, FONT_SERIF, FONT_MONO, FONT_BODY } from "../../tokens.js";
 import { Panel } from "./shared/Panel.jsx";
 import { Btn } from "./shared/Btn.jsx";
 import { Field, Input } from "./shared/Field.jsx";
+
+/* Passcode gate. The plaintext passcode never appears in the code or the
+   bundle — only its SHA-256 hex, provided at build time via .env.local:
+     VITE_ADMIN_PASS_HASH=<sha256 hex of your passcode>
+   ⇄ later: POST /api/v1/auth/login { email, password } → { token } */
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 export function LoginScreen({ onLogin }) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
   const [lines, setLines] = useState([]);
-  const submit = () => {
-    if (busy) return; setBusy(true);
+
+  const submit = async () => {
+    if (busy) return;
+    setError("");
+    const expected = import.meta.env.VITE_ADMIN_PASS_HASH;
+    if (!expected) { setError("admin passcode not configured — set VITE_ADMIN_PASS_HASH"); return; }
+    if (await sha256Hex(pass) !== expected.toLowerCase()) {
+      setError("wrong passcode — the desk stays locked");
+      setPass("");
+      return;
+    }
+    setBusy(true);
     const seq = [
       { html:`<span style="color:#4ade80">❯</span> auth --user ${email||"abdullah"}`, t:0 },
       { html:`<span style="color:#79c0ff">›</span> verifying credentials…`, t:380 },
@@ -46,7 +67,12 @@ export function LoginScreen({ onLogin }) {
               <Field label="Email"><Input type="email" placeholder="abdullah@unsaidscript.dev" value={email} onChange={e=>setEmail(e.target.value)}/></Field>
               <Field label="Password"><Input type="password" placeholder="••••••••" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/></Field>
               <Btn onClick={submit} style={{ width:"100%", justifyContent:"center", marginTop:4 }}>❯ enter the studio</Btn>
-              <div style={{ textAlign:"center", marginTop:16, fontSize:11.5, color:C.muted, fontFamily:FONT_MONO }}>demo build — any credentials open the door</div>
+              {error && (
+                <div style={{ marginTop:14, background:C.coralS, border:`1.5px solid ${C.coral}55`, borderRadius:10, padding:"9px 14px", fontSize:12, color:C.coral, fontFamily:FONT_MONO, textAlign:"center" }}>
+                  ✕ {error}
+                </div>
+              )}
+              <div style={{ textAlign:"center", marginTop:16, fontSize:11.5, color:C.muted, fontFamily:FONT_MONO }}>owner's desk — passcode required</div>
             </>
           )}
         </Panel>

@@ -9,6 +9,7 @@ import { LandingPage } from "./pages/LandingPage.jsx";
 import { WriterPage } from "./pages/WriterPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { ReviewPage } from "./pages/ReviewPage.jsx";
+import { TitheePage } from "./pages/TitheePage.jsx";
 
 const NAV = [["/", "Home"], ["/writer", "The Writer"], ["/engineer", "The Engineer"]];
 
@@ -17,7 +18,10 @@ function useSeo(pathname) {
   useEffect(() => {
     let title = "Abdullah Al Mamun — Writer & Software Engineer | unsaidscript";
     let desc = "One person, two scripts. Book reviews, translations and writing on one side; fintech engineering in Java, Spring Boot and React on the other.";
-    if (pathname.startsWith("/writer")) {
+    if (pathname.startsWith("/tithee") || pathname.startsWith("/kishoar")) {
+      title = "Kishoar Jahan Tithee — Software QA Engineer | Data Analytics & AI Researcher";
+      desc = "Software QA Engineer with 3+ years in Telecom and FinTech — test automation, SQL data validation, API testing, microservices. Published AI researcher in LLMs.";
+    } else if (pathname.startsWith("/writer")) {
       title = "The Writer — Book Reviews, Translations & Notes | unsaidscript";
       desc = "Honest book reviews from Rumi to Rabindranath to Murakami, a translation desk (English ⇄ বাংলা), and notes on research, tutorials and opinions.";
     } else if (pathname.startsWith("/engineer")) {
@@ -98,6 +102,19 @@ function Shell() {
 
   const isActive = (path) => path === "/" ? location.pathname === "/" : location.pathname.startsWith(path) || (path === "/writer" && location.pathname.startsWith("/reviews"));
 
+  /* her page stands alone — no site nav, no footer, her own world */
+  const standalone = location.pathname.startsWith("/tithee") || location.pathname.startsWith("/kishoar");
+  if (standalone) {
+    return (
+      <div style={{ opacity:fading?0:1, transition:"opacity .22s" }}>
+        <Routes>
+          <Route path="/tithee" element={<TitheePage/>}/>
+          <Route path="/kishoar" element={<TitheePage/>}/>
+        </Routes>
+      </div>
+    );
+  }
+
   return (
     <div style={{ background:C.bg, color:C.ink, fontFamily:"'Karla','SF Pro Display',system-ui,sans-serif", minHeight:"100vh", overflowX:"hidden" }}>
       {/* warm paper grain */}
@@ -130,6 +147,8 @@ function Shell() {
           <Route path="/writer" element={<WriterPage openBook={openBook} showToast={showToast}/>}/>
           <Route path="/engineer" element={<HomePage goTo={goTo}/>}/>
           <Route path="/reviews/:slug" element={<ReviewRoute goTo={goTo}/>}/>
+          <Route path="/tithee" element={<TitheePage/>}/>
+          <Route path="/kishoar" element={<TitheePage/>}/>
           <Route path="*" element={<Navigate to="/" replace/>}/>
         </Routes>
       </div>

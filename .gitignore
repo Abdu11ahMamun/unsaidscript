@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# local env — holds the admin passcode hash
+.env
+.env.local
+.env.*.local

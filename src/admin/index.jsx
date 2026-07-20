@@ -27,8 +27,15 @@ const OS_CSS = `
   button:hover{filter:brightness(1.03)}
 `;
 
+const AUTH_KEY = "unsaid.os.auth";
+
 export default function AdminApp() {
-  const [authed, setAuthed] = useState(false);
+  const [authed, setAuthedState] = useState(() => sessionStorage.getItem(AUTH_KEY) === "1");
+  const setAuthed = (v) => {
+    if (v) sessionStorage.setItem(AUTH_KEY, "1");
+    else sessionStorage.removeItem(AUTH_KEY);
+    setAuthedState(v);
+  };
   const [section, setSection] = useState("dashboard");
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
